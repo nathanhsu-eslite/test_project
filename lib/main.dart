@@ -1,7 +1,10 @@
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:test_3_35_7/cat.dart';
 import 'dart:developer' as dev;
+
+import 'package:test_3_35_7/dio_client.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,7 +13,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,21 +35,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final dio = Dio();
+  final DioClient _dioClient = DioClient(Dio());
+  late Future<CatImage> _catImageFuture;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _catImageFuture = _getCatImage();
   }
 
-  Future<CatImage> getHttp() async {
-    final response = await dio.get(
-      'https://api.thecatapi.com/v1/images/search',
+  Future<CatImage> _getCatImage() {
+    return _dioClient.get(
+      '/images/search',
+      parser: (data) => CatImage.fromJson(data[0] as Map<String, dynamic>),
     );
+  }
 
-    final data = response.data[0];
-    return CatImage.fromJson(data as Map<String, dynamic>);
+  void _refresh() {
+    setState(() {
+      _catImageFuture = _getCatImage();
+    });
   }
 
   @override
@@ -59,21 +66,26 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: FutureBuilder<CatImage>(
-          future: getHttp(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
+          future: _catImageFuture,
+          builder: (BuildContext context, AsyncSnapshot<CatImage> snapshot) {
             if (snapshot.hasError) {
-              dev.log(snapshot.error.toString());
-              return ErrorPage();
+              dev.log(snapshot.error.toString(), error: snapshot.error);
+              final error = snapshot.error;
+
+              return ErrorPage(error:error);
             }
 
             switch (snapshot.connectionState) {
               case ConnectionState.none:
               case ConnectionState.waiting:
               case ConnectionState.active:
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
 
               case ConnectionState.done:
-                final CatImage image = snapshot.data;
+                final CatImage? image = snapshot.data;
+                if (image == null) {
+                  return ErrorPage(error:Error());
+                }
                 return Center(
                   child: Image.network(
                     image.url,
@@ -86,22 +98,50 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // 點擊按鈕重新抓圖
-          setState(() {
-            getHttp();
-          });
-        },
+        onPressed: _refresh,
+        child: const Icon(Icons.refresh),
       ),
     );
   }
 }
 
 class ErrorPage extends StatelessWidget {
-  const ErrorPage({super.key});
+  final Object? error;
+
+  const ErrorPage({super.key, required this.error});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('error page')));
+    final String errorMessage = error?.toString() ?? 'An unknown error occurred';
+
+    return Center(child: Text(errorMessage));
   }
+}
+
+String error(Object? error){
+  String errorMessage;
+  if (error is DioException) {
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        errorMessage = '連線逾時';
+        break;
+      case DioExceptionType.badResponse:
+        errorMessage = 'Bad response: \${error.response?.statusCode}';
+        break;
+      case DioExceptionType.cancel:
+        errorMessage = 'Request 取消';
+        break;
+      case DioExceptionType.connectionError:
+        errorMessage = '連線錯誤';
+        break;
+      default:
+        errorMessage = '未知錯誤';
+        break;
+    }
+  } else {
+    errorMessage = '未預期的錯誤';
+  }
+  return errorMessage;
 }
