@@ -33,7 +33,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final dio = Dio();
+
 
   @override
   void initState() {
@@ -41,14 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  Future<CatImage> getHttp() async {
-    final response = await dio.get(
-      'https://api.thecatapi.com/v1/images/search',
-    );
-
-    final data = response.data[0];
-    return CatImage.fromJson(data as Map<String, dynamic>);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,50 +50,24 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: FutureBuilder<CatImage>(
-          future: getHttp(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasError) {
-              dev.log(snapshot.error.toString());
-              return ErrorPage();
-            }
-
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-              case ConnectionState.active:
-                return CircularProgressIndicator();
-
-              case ConnectionState.done:
-                final CatImage image = snapshot.data;
-                return Center(
-                  child: Image.network(
-                    image.url,
-                    width: image.width.toDouble(),
-                    height: image.height.toDouble(),
-                  ),
-                );
-            }
-          },
-        ),
+        child:Text('todo-list'),
       ),
       floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
         onPressed: () {
-          // 點擊按鈕重新抓圖
-          setState(() {
-            getHttp();
-          });
+          print('準備新增項目');
+          print('準備新增項目');
         },
       ),
     );
   }
 }
 
-class ErrorPage extends StatelessWidget {
-  const ErrorPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('error page')));
-  }
-}
+// class ErrorPage extends StatelessWidget {
+//   const ErrorPage({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(body: Center(child: Text('error page')));
+//   }
+// }
