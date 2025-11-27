@@ -4,12 +4,8 @@ import 'package:test_3_35_7/cat.dart';
 import 'dart:developer' as dev;
 
 void main() {
-  throw Exception("測試用的炸彈，原本應該刪掉的！"); // 加這行
   runApp(const MyApp());
 }
-// void main() {
-//   runApp(const MyApp());
-// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
