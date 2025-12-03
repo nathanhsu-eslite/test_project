@@ -36,7 +36,7 @@ class CatApiClient {
     }
   }
 
-  Future<List<CatImage>> fetchCatsImages(int limit) async {
+  Future<List<ImageModel>> fetchCatsImages(int limit) async {
     return await get(
       '/images/search',
       queryParameters: {"limit": limit},
@@ -46,9 +46,9 @@ class CatApiClient {
             throw Exception("Expected a list of cats, got: $data");
           }
 
-          List<CatImage> catList = [];
+          List<ImageModel> catList = [];
           for (int i = 0; i < data.length; i++) {
-            catList.add(CatImage.fromJson(data[i] as Map<String, dynamic>));
+            catList.add(ImageModel.fromJson(data[i] as Map<String, dynamic>));
           }
           return catList;
         } on Exception catch (e) {
@@ -58,24 +58,23 @@ class CatApiClient {
     );
   }
 
-  Future<Map<String, dynamic>> fetchCatsDetail(String id) async {
+  Future<BreedModel?> fetchCatsDetail(String id) async {
     return await get(
       '/images/$id',
       queryParameters: {},
       parser: (data) {
-        return {
-          "cat_image": CatImage.fromJson(data as Map<String, dynamic>),
-          "breeds": _extractFirstBreed(data['breeds'] as List<dynamic>),
-        };
+        return BreedModel.fromJson(
+          _extractFirstBreed(data['breeds'] as List<dynamic>).toJson(),
+        );
       },
     );
   }
 }
 
-List<BreedModel> _extractFirstBreed(List<dynamic> source) {
+BreedModel _extractFirstBreed(List<dynamic> source) {
   // 取出第一個，轉成 BreedModel，再放回 List 回傳
   final firstItem = source.first as Map<String, dynamic>;
-  return [BreedModel.fromJson(firstItem)];
+  return BreedModel.fromJson(firstItem);
 }
 
 @override
