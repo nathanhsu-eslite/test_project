@@ -16,8 +16,22 @@ void main() {
     });
 
     test(
-      'fetchCatImages returns List<ImageModel> when api call is successful',
+      'fetchCatImages returns List<CatImageEntity> when api call is successful',
       () async {
+        final catImageEntity = [
+          CatImageEntity(
+            id: '1',
+            url: 'https://example.com/cat1.jpg',
+            urlHeight: 800,
+            urlWidth: 600,
+          ),
+          CatImageEntity(
+            id: '2',
+            url: 'https://example.com/cat2.jpg',
+            urlWidth: 1024,
+            urlHeight: 768,
+          ),
+        ];
         final imageModels = [
           ImageModel(
             id: '1',
@@ -36,10 +50,10 @@ void main() {
           () => catApiClient.fetchCatsImages(2),
         ).thenAnswer((_) async => imageModels);
         final result = await getImages.fetchCatsImages(2);
-        expect(result, isA<List<ImageModel>>());
+        expect(result, isA<List<CatImageEntity>>());
         expect(result.length, equals(2));
-        expect(result, equals(imageModels));
-        expect(result[0].url, imageModels[0].url);
+        expect(result, equals(catImageEntity));
+        expect(result[0].url, catImageEntity[0].url);
       },
     );
 
@@ -47,6 +61,13 @@ void main() {
       when(
         () => catApiClient.fetchCatsImages(2),
       ).thenThrow(Exception('API Error'));
+      expect(
+        () async => await getImages.fetchCatsImages(2),
+        throwsA(isA<Exception>()),
+      );
+    });
+    test('fetchCatImages throws exception when list is empty', () async {
+      when(() => catApiClient.fetchCatsImages(2)).thenAnswer((_) async => []);
       expect(
         () async => await getImages.fetchCatsImages(2),
         throwsA(isA<Exception>()),
