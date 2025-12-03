@@ -5,6 +5,8 @@ part 'breeds.g.dart';
 
 @JsonSerializable()
 class BreedModel {
+  @JsonKey(name: 'id')
+  final String breedId;
   final String name;
   final String description;
   final String temperament;
@@ -59,11 +61,12 @@ class BreedModel {
   final int hypoallergenic;
   final int? indoor;
   final int? lap;
-
+  @JsonKey(name: 'reference_image_id')
   final String? referenceImageId;
   final Weight? weight;
 
   BreedModel({
+    required this.breedId,
     required this.name,
     required this.description,
     required this.temperament,
