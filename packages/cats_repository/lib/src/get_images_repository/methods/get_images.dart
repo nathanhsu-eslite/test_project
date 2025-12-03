@@ -11,6 +11,9 @@ class GetImages {
       .fetchCatsImages(limit)
       .then((catList) {
         List<CatImageEntity> cats = [];
+        if (catList.isEmpty) {
+          throw Exception("No cat images found");
+        }
         for (int i = 0; i < catList.length; i++) {
           final catModel = catList[i];
           cats.add(
