@@ -145,7 +145,7 @@ void main() {
           ),
         ).thenAnswer((_) async => response);
 
-        final result = await catApiClient.fetchCatsDetail('1');
+        final result = await catApiClient.fetchCatData('1');
 
         expect(result, isA<BreedModel>());
         expect(result?.breedId, 'hima');
@@ -161,7 +161,7 @@ void main() {
         ).thenThrow(DioException(requestOptions: RequestOptions(path: '')));
 
         expect(
-          () async => await catApiClient.fetchCatsDetail('1'),
+          () async => await catApiClient.fetchCatData('1'),
           throwsA(isA<DioException>()),
         );
       });
@@ -181,7 +181,7 @@ void main() {
         ).thenAnswer((_) async => response);
 
         expect(
-          () async => await catApiClient.fetchCatsDetail('1'),
+          () async => await catApiClient.fetchCatData('1'),
           throwsA(isA<TypeError>()),
         );
       });

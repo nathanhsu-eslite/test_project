@@ -8,7 +8,7 @@ class GetDetail {
 
   Future<BreedModel?> fetchCatDetail(String id) async {
     try {
-      final data = await _catApiClient.fetchCatsDetail(id);
+      final data = await _catApiClient.fetchCatData(id);
       if (data == null) {
         throw Exception("No breed information available for cat id: $id");
       }

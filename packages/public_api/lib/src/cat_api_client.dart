@@ -58,7 +58,7 @@ class CatApiClient {
     );
   }
 
-  Future<BreedModel?> fetchCatsDetail(String id) async {
+  Future<BreedModel?> fetchCatData(String id) async {
     return await get(
       '/images/$id',
       queryParameters: {},
