@@ -63,15 +63,16 @@ class CatApiClient {
       '/images/$id',
       queryParameters: {},
       parser: (data) {
-        return BreedModel.fromJson(
-          _extractFirstBreed(data['breeds'] as List<dynamic>).toJson(),
-        );
+        return _extractFirstBreed(data['breeds']);
       },
     );
   }
 }
 
-BreedModel _extractFirstBreed(List<dynamic> source) {
+BreedModel? _extractFirstBreed(List<dynamic> source) {
+  if (source.isEmpty) {
+    return null;
+  }
   // 取出第一個，轉成 BreedModel，再放回 List 回傳
   final firstItem = source.first as Map<String, dynamic>;
   return BreedModel.fromJson(firstItem);
