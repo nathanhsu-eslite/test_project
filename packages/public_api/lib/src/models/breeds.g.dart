@@ -1,0 +1,86 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'breeds.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+BreedModel _$BreedModelFromJson(Map<String, dynamic> json) => BreedModel(
+  name: json['name'] as String,
+  description: json['description'] as String,
+  temperament: json['temperament'] as String,
+  origin: json['origin'] as String,
+  lifeSpan: json['life_span'] as String,
+  altNames: json['alt_names'] as String?,
+  wikipediaUrl: json['wikipedia_url'] as String?,
+  cfaUrl: json['cfa_url'] as String?,
+  vetStreetUrl: json['vetstreet_url'] as String?,
+  vcaHospitalsUrl: json['vcahospitals_url'] as String?,
+  countryCode: json['country_code'] as String,
+  adaptability: (json['adaptability'] as num).toInt(),
+  affectionLevel: (json['affection_level'] as num).toInt(),
+  childFriendly: (json['child_friendly'] as num).toInt(),
+  dogFriendly: (json['dog_friendly'] as num).toInt(),
+  energyLevel: (json['energy_level'] as num).toInt(),
+  grooming: (json['grooming'] as num).toInt(),
+  healthIssues: (json['health_issues'] as num).toInt(),
+  intelligence: (json['intelligence'] as num).toInt(),
+  sheddingLevel: (json['shedding_level'] as num).toInt(),
+  socialNeeds: (json['social_needs'] as num).toInt(),
+  strangerFriendly: (json['stranger_friendly'] as num).toInt(),
+  vocalisation: (json['vocalisation'] as num).toInt(),
+  experimental: (json['experimental'] as num).toInt(),
+  hairless: (json['hairless'] as num).toInt(),
+  natural: (json['natural'] as num).toInt(),
+  rare: (json['rare'] as num).toInt(),
+  rex: (json['rex'] as num).toInt(),
+  suppressedTail: (json['suppressed_tail'] as num).toInt(),
+  shortLegs: (json['short_legs'] as num).toInt(),
+  hypoallergenic: (json['hypoallergenic'] as num).toInt(),
+  indoor: (json['indoor'] as num?)?.toInt(),
+  lap: (json['lap'] as num?)?.toInt(),
+  referenceImageId: json['referenceImageId'] as String?,
+  weight: json['weight'] == null
+      ? null
+      : Weight.fromJson(json['weight'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$BreedModelToJson(BreedModel instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'description': instance.description,
+      'temperament': instance.temperament,
+      'origin': instance.origin,
+      'life_span': instance.lifeSpan,
+      'alt_names': instance.altNames,
+      'wikipedia_url': instance.wikipediaUrl,
+      'cfa_url': instance.cfaUrl,
+      'vetstreet_url': instance.vetStreetUrl,
+      'vcahospitals_url': instance.vcaHospitalsUrl,
+      'country_code': instance.countryCode,
+      'adaptability': instance.adaptability,
+      'affection_level': instance.affectionLevel,
+      'child_friendly': instance.childFriendly,
+      'dog_friendly': instance.dogFriendly,
+      'energy_level': instance.energyLevel,
+      'grooming': instance.grooming,
+      'health_issues': instance.healthIssues,
+      'intelligence': instance.intelligence,
+      'shedding_level': instance.sheddingLevel,
+      'social_needs': instance.socialNeeds,
+      'stranger_friendly': instance.strangerFriendly,
+      'vocalisation': instance.vocalisation,
+      'experimental': instance.experimental,
+      'hairless': instance.hairless,
+      'natural': instance.natural,
+      'rare': instance.rare,
+      'rex': instance.rex,
+      'suppressed_tail': instance.suppressedTail,
+      'short_legs': instance.shortLegs,
+      'hypoallergenic': instance.hypoallergenic,
+      'indoor': instance.indoor,
+      'lap': instance.lap,
+      'referenceImageId': instance.referenceImageId,
+      'weight': instance.weight,
+    };

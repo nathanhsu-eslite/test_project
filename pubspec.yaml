@@ -37,12 +37,15 @@ dependencies:
   flutter_bloc: ^9.1.1
   dio: ^5.9.0
   get_it: ^9.1.1
+  equatable: ^2.0.7
+
+  public_api:
+    path: packages/public_api
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: ^5.4.4
-  build_runner: ^2.4.8
+  build_runner: ^2.10.4
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
