@@ -1,3 +1,4 @@
+import 'package:cats_repository/cats_repository.dart';
 import 'package:cats_repository/src/get_cat_detail_repository/methods/get_detail.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -16,13 +17,20 @@ void main() {
     });
 
     test(
-      'fetchCatDetail returns BreedModel when api call is successful',
+      'fetchCatDetail returns CatDetailEntity when api call is successful',
       () async {
         const id = '1';
+        final catDetailEntity = CatDetailEntity(
+          breedName: 'Abyssinian',
+          temperament: 'Active, Energetic, Independent, Intelligent, Gentle',
+          origin: "EG",
+          description:
+              'The Abyssinian is a breed of domestic short-haired cat with a distinctive "ticked" tabby coat, in which individual hairs are banded with different colors.',
+        );
         final breedModel = BreedModel(
           breedId: '1',
           name: 'Abyssinian',
-          origin: 'Egypt',
+          origin: 'EG',
           description:
               'The Abyssinian is a breed of domestic short-haired cat with a distinctive "ticked" tabby coat, in which individual hairs are banded with different colors.',
           temperament: 'Active, Energetic, Independent, Intelligent, Gentle',
@@ -51,28 +59,29 @@ void main() {
           referenceImageId: '0XYvRd7oD',
           weight: Weight(imperial: '7  -  10', metric: '3 - 5'),
         );
+
         when(
-          () => catApiClient.fetchCatsDetail(id),
+          () => catApiClient.fetchCatData(id),
         ).thenAnswer((_) async => breedModel);
+
         final result = await getDetail.fetchCatDetail(id);
-        expect(result, isA<BreedModel>());
-        expect(result, equals(breedModel));
+        expect(result, isA<CatDetailEntity>());
+        expect(result!.breedName, breedModel.name);
+        expect(result, equals(catDetailEntity));
       },
     );
 
     test('fetchCatDetail throws exception when api call fails', () async {
       const id = '1';
       when(
-        () => catApiClient.fetchCatsDetail(id),
+        () => catApiClient.fetchCatData(id),
       ).thenThrow(Exception('Failed to fetch cat detail'));
       expect(() => getDetail.fetchCatDetail(id), throwsA(isA<Exception>()));
     });
 
     test('fetchCatDetail throws exception when api returns null', () async {
       const id = '1';
-      when(
-        () => catApiClient.fetchCatsDetail(id),
-      ).thenAnswer((_) async => null);
+      when(() => catApiClient.fetchCatData(id)).thenAnswer((_) async => null);
       expect(() => getDetail.fetchCatDetail(id), throwsA(isA<Exception>()));
     });
   });
