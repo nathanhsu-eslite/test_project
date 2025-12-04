@@ -7,6 +7,7 @@ part of 'breeds.dart';
 // **************************************************************************
 
 BreedModel _$BreedModelFromJson(Map<String, dynamic> json) => BreedModel(
+  breedId: json['id'] as String,
   name: json['name'] as String,
   description: json['description'] as String,
   temperament: json['temperament'] as String,
@@ -40,7 +41,7 @@ BreedModel _$BreedModelFromJson(Map<String, dynamic> json) => BreedModel(
   hypoallergenic: (json['hypoallergenic'] as num).toInt(),
   indoor: (json['indoor'] as num?)?.toInt(),
   lap: (json['lap'] as num?)?.toInt(),
-  referenceImageId: json['referenceImageId'] as String?,
+  referenceImageId: json['reference_image_id'] as String?,
   weight: json['weight'] == null
       ? null
       : Weight.fromJson(json['weight'] as Map<String, dynamic>),
@@ -48,6 +49,7 @@ BreedModel _$BreedModelFromJson(Map<String, dynamic> json) => BreedModel(
 
 Map<String, dynamic> _$BreedModelToJson(BreedModel instance) =>
     <String, dynamic>{
+      'id': instance.breedId,
       'name': instance.name,
       'description': instance.description,
       'temperament': instance.temperament,
@@ -81,6 +83,6 @@ Map<String, dynamic> _$BreedModelToJson(BreedModel instance) =>
       'hypoallergenic': instance.hypoallergenic,
       'indoor': instance.indoor,
       'lap': instance.lap,
-      'referenceImageId': instance.referenceImageId,
+      'reference_image_id': instance.referenceImageId,
       'weight': instance.weight,
     };
