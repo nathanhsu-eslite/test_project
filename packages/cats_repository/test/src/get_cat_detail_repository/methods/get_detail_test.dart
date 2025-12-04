@@ -66,7 +66,7 @@ void main() {
 
         final result = await getDetail.fetchCatDetail(id);
         expect(result, isA<CatDetailEntity>());
-        expect(result!.breedName, breedModel.name);
+        expect(result.breedName, breedModel.name);
         expect(result, equals(catDetailEntity));
       },
     );
