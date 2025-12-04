@@ -1,5 +1,4 @@
 import 'package:cats_repository/cats_repository.dart';
-import 'package:cats_repository/src/get_cat_detail_repository/methods/get_detail.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:public_api/public_api.dart';
@@ -7,15 +6,14 @@ import 'package:public_api/public_api.dart';
 class MockCatApiClient extends Mock implements CatApiClient {}
 
 void main() {
+  late CatApiClient catApiClient;
+  late GetCatDetailRepo getDetail;
+
+  setUpAll(() {
+    catApiClient = MockCatApiClient();
+    getDetail = GetCatDetailRepo(catApiClient: catApiClient);
+  });
   group('GetDetail', () {
-    late CatApiClient catApiClient;
-    late GetDetail getDetail;
-
-    setUp(() {
-      catApiClient = MockCatApiClient();
-      getDetail = GetDetail(catApiClient: catApiClient);
-    });
-
     test(
       'fetchCatDetail returns CatDetailEntity when api call is successful',
       () async {
@@ -64,9 +62,9 @@ void main() {
           () => catApiClient.fetchCatData(id),
         ).thenAnswer((_) async => breedModel);
 
-        final result = await getDetail.fetchCatDetail(id);
+        final result = await getDetail.get(id);
         expect(result, isA<CatDetailEntity>());
-        expect(result!.breedName, breedModel.name);
+        expect(result.breedName, breedModel.name);
         expect(result, equals(catDetailEntity));
       },
     );
@@ -76,13 +74,13 @@ void main() {
       when(
         () => catApiClient.fetchCatData(id),
       ).thenThrow(Exception('Failed to fetch cat detail'));
-      expect(() => getDetail.fetchCatDetail(id), throwsA(isA<Exception>()));
+      expect(() => getDetail.get(id), throwsA(isA<Exception>()));
     });
 
     test('fetchCatDetail throws exception when api returns null', () async {
       const id = '1';
       when(() => catApiClient.fetchCatData(id)).thenAnswer((_) async => null);
-      expect(() => getDetail.fetchCatDetail(id), throwsA(isA<Exception>()));
+      expect(() => getDetail.get(id), throwsA(isA<Exception>()));
     });
   });
 }
