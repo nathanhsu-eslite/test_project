@@ -1,32 +1,24 @@
 import 'package:cats_repository/cats_repository.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/src/domains/cat/useCase/get_detail.dart';
 import 'package:domain/src/domains/cat/useCase/get_images.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 // Mocks
-class MockGetDetail extends Mock implements GetDetail {}
+class MockGetDetailUC extends Mock implements GetCatDetailUC {}
 
-class MockGetImages extends Mock implements GetImages {}
+class MockGetImagesUC extends Mock implements GetCatsImagesUC {}
+
+class MockDio extends Mock implements Dio {}
 
 void main() {
   group('Cat Use Cases', () {
-    // Mocks
-    late MockGetDetail mockGetDetail;
-    late MockGetImages mockGetImages;
-
-    // Use Cases
-    late GetCatDetail getCatDetailUseCase;
-    late GetCatsImages getCatsImagesUseCase;
-
-    setUp(() {
-      mockGetDetail = MockGetDetail();
-      mockGetImages = MockGetImages();
-      getCatDetailUseCase = GetCatDetail(getDetail: mockGetDetail);
-      getCatsImagesUseCase = GetCatsImages(getImages: mockGetImages);
-    });
-
     group('GetCatDetail', () {
+      late MockGetDetailUC mockGetDetailUC;
+      setUp(() {
+        mockGetDetailUC = MockGetDetailUC();
+      });
       test('should get cat detail from the repository', () async {
         // arrange
         const catId = '1';
@@ -37,18 +29,23 @@ void main() {
           description: "description",
         );
         when(
-          () => mockGetDetail.fetchCatDetail(catId),
+          () => mockGetDetailUC.call(catId),
         ).thenAnswer((_) async => catDetailEntity);
         // act
-        final result = await getCatDetailUseCase.call(catId);
+        final result = await mockGetDetailUC.call(catId);
         // assert
         expect(result, catDetailEntity);
-        verify(() => mockGetDetail.fetchCatDetail(catId));
-        verifyNoMoreInteractions(mockGetDetail);
+        verify(() => mockGetDetailUC.call(catId));
+        verifyNoMoreInteractions(mockGetDetailUC);
       });
     });
 
     group('GetCatsImages', () {
+      late MockGetImagesUC mockGetImages;
+
+      setUp(() {
+        mockGetImages = MockGetImagesUC();
+      });
       test('should get cat images from the repository', () async {
         // arrange
         const limit = 2;
@@ -62,14 +59,14 @@ void main() {
           ),
         ];
         when(
-          () => mockGetImages.fetchCatsImages(limit),
+          () => mockGetImages.call(limit),
         ).thenAnswer((_) async => catImageEntities);
         // act
-        final result = await getCatsImagesUseCase.call(limit);
+        final result = await mockGetImages.call(limit);
         // assert
         expect(result, catImageEntities);
         expect(result[1].url, catImageEntities[1].url);
-        verify(() => mockGetImages.fetchCatsImages(limit));
+        verify(() => mockGetImages.call(limit));
         verifyNoMoreInteractions(mockGetImages);
       });
     });

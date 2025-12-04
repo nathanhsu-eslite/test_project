@@ -1,14 +1,17 @@
 import 'package:cats_repository/cats_repository.dart';
+import 'package:dio/dio.dart';
 import 'package:domain/src/domains/cat/domain.dart';
+import 'package:public_api/public_api.dart';
 
-class GetCatDetail implements GetCatsDetailUseCase {
-  final GetDetail getDetail;
-  GetCatDetail({required this.getDetail});
+class GetCatDetailUC implements GetCatsDetailUseCase {
+  final GetCatDetailRepo getDetailRepo;
+  GetCatDetailUC({required this.getDetailRepo});
 
-  Future<CatDetailEntity> fetchCatDetail(String id) async =>
-      await getDetail.fetchCatDetail(id);
+  factory GetCatDetailUC.dio({required Dio dio}) {
+    final api = CatApiClient(dio);
+    return GetCatDetailUC(getDetailRepo: GetCatDetailRepo(catApiClient: api));
+  }
 
   @override
-  Future<CatDetailEntity> call(String id) async =>
-      await getDetail.fetchCatDetail(id);
+  Future<CatDetailEntity> call(String id) async => await getDetailRepo.get(id);
 }
