@@ -7,7 +7,7 @@ class GetDetail {
   GetDetail({required CatApiClient catApiClient})
     : _catApiClient = catApiClient;
 
-  Future<CatDetailEntity?> fetchCatDetail(String id) async {
+  Future<CatDetailEntity> fetchCatDetail(String id) async {
     try {
       final breedModel = await _catApiClient.fetchCatData(id);
       if (breedModel == null) {
