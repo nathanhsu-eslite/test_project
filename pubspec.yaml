@@ -39,8 +39,11 @@ dependencies:
   get_it: ^9.1.1
   equatable: ^2.0.7
 
-  public_api:
-    path: packages/public_api
+  domain:
+    path: packages/domain
+  # cats_repository:
+  #   path: packages/cats_repository
+    
 
 dev_dependencies:
   flutter_test:
