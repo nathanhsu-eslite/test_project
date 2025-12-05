@@ -9,7 +9,7 @@ part 'get_cat_images_state.dart';
 
 class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesState> {
   GetCatImagesBloc({required this.getCatsImagesUC})
-      : super(GetCatImagesInitialState()) {
+    : super(GetCatImagesInitialState()) {
     on<GetCatImages>(_onGetCatImages);
     on<CatImageRefreshed>(_onCatImageRefreshed);
   }
@@ -21,7 +21,8 @@ class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesState> {
     Emitter<GetCatImagesState> emit,
   ) async {
     final currentState = state;
-    if (currentState is GetCatImagesSuccessState && currentState.hasReachedMax) {
+    if (currentState is GetCatImagesSuccessState &&
+        currentState.hasReachedMax) {
       return;
     }
     try {
@@ -45,7 +46,12 @@ class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesState> {
           ),
         );
       } else {
-        emit(GetCatImagesSuccessState(images));
+        emit(
+          GetCatImagesSuccessState(
+            images,
+            hasReachedMax: images.length < limit,
+          ),
+        );
       }
     } catch (e) {
       emit(
@@ -73,6 +79,7 @@ class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesState> {
                 ),
               )
               .toList(),
+          hasReachedMax: cats.length < limit,
         ),
       );
     } catch (e) {

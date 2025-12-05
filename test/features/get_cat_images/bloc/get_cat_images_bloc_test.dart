@@ -37,14 +37,27 @@ void main() {
         'emits [GetCatImagesLoadingState, GetCatImagesSuccessState] when GetCatImages is added and succeeds',
         setUp: () {
           when(
-            () => mockGetCatsImagesUC(5),
+            () => mockGetCatsImagesUC(10),
           ).thenAnswer((_) async => catImagesEntity);
         },
         build: () => getCatImagesBloc,
         act: (bloc) => bloc.add(GetCatImages()),
         expect: () => [
           GetCatImagesLoadingState(),
-          GetCatImagesSuccessState(myImages),
+          GetCatImagesSuccessState(myImages, hasReachedMax: true),
+        ],
+      );
+
+      blocTest<GetCatImagesBloc, GetCatImagesState>(
+        'emits [GetCatImagesSuccessState] with hasReachedMax true when the last batch of images is fetched',
+        setUp: () {
+          when(() => mockGetCatsImagesUC(10)).thenAnswer((_) async => []);
+        },
+        build: () => getCatImagesBloc,
+        act: (bloc) => bloc.add(GetCatImages()),
+        expect: () => [
+          GetCatImagesLoadingState(),
+          const GetCatImagesSuccessState([], hasReachedMax: true),
         ],
       );
 
@@ -52,7 +65,7 @@ void main() {
         'emits [GetCatImagesLoadingState, GetCatImagesFailureState] when GetCatImages is added and fails',
         setUp: () {
           when(
-            () => mockGetCatsImagesUC(5),
+            () => mockGetCatsImagesUC(10),
           ).thenThrow(Exception('Failed to fetch cat images'));
         },
         build: () => getCatImagesBloc,
@@ -77,14 +90,14 @@ void main() {
         'emits [GetCatImagesLoadingState, GetCatImagesSuccessState] when CatImageRefreshed is added and succeeds',
         setUp: () {
           when(
-            () => mockGetCatsImagesUC(5),
+            () => mockGetCatsImagesUC(10),
           ).thenAnswer((_) async => catImagesEntity);
         },
         build: () => getCatImagesBloc,
         act: (bloc) => bloc.add(CatImageRefreshed()),
         expect: () => [
           GetCatImagesLoadingState(),
-          GetCatImagesSuccessState(myImages),
+          GetCatImagesSuccessState(myImages, hasReachedMax: true),
         ],
       );
 
@@ -92,7 +105,7 @@ void main() {
         'emits [GetCatImagesLoadingState, GetCatImagesFailureState] when CatImageRefreshed is added and fails',
         setUp: () {
           when(
-            () => mockGetCatsImagesUC(5),
+            () => mockGetCatsImagesUC(10),
           ).thenThrow(Exception('Failed to refresh cat images'));
         },
         build: () => getCatImagesBloc,
