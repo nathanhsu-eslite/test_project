@@ -8,12 +8,12 @@ part 'get_cat_images_event.dart';
 part 'get_cat_images_state.dart';
 
 class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesState> {
-  GetCatImagesBloc({required this.getCatsImagesUC})
+  GetCatImagesBloc({required this.getCatsImagesUseCase})
     : super(GetCatImagesInitialState()) {
     on<GetCatImages>(_onGetCatImages);
     on<CatImageRefreshed>(_onCatImageRefreshed);
   }
-  final GetCatsImagesUC getCatsImagesUC;
+  final GetCatsImagesUseCase getCatsImagesUseCase;
   final int limit = 10;
 
   Future<void> _onGetCatImages(
@@ -29,7 +29,7 @@ class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesState> {
       if (currentState is GetCatImagesInitialState) {
         emit(GetCatImagesLoadingState());
       }
-      final rsp = await getCatsImagesUC(limit);
+      final rsp = await getCatsImagesUseCase(limit);
       final List<MyImage> images = rsp.map((entity) {
         return MyImage(
           id: entity.id,
@@ -66,7 +66,7 @@ class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesState> {
   ) async {
     try {
       emit(GetCatImagesLoadingState());
-      final cats = await getCatsImagesUC(limit);
+      final cats = await getCatsImagesUseCase(limit);
       emit(
         GetCatImagesSuccessState(
           cats

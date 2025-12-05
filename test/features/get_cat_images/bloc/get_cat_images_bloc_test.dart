@@ -6,16 +6,18 @@ import 'package:test_3_35_7/features/get_cat_images/bloc/get_cat_images_bloc.dar
 import 'package:domain/domain.dart';
 import 'package:test_3_35_7/features/get_cat_images/models/my_image.dart';
 
-class MockGetCatsImagesUC extends Mock implements GetCatsImagesUC {}
+class MockGetCatsImagesUseCase extends Mock implements GetCatsImagesUseCase {}
 
 void main() {
   group('GetCatImagesBloc', () {
     late GetCatImagesBloc getCatImagesBloc;
-    late MockGetCatsImagesUC mockGetCatsImagesUC;
+    late MockGetCatsImagesUseCase mockGetCatsImagesUC;
 
     setUp(() {
-      mockGetCatsImagesUC = MockGetCatsImagesUC();
-      getCatImagesBloc = GetCatImagesBloc(getCatsImagesUC: mockGetCatsImagesUC);
+      mockGetCatsImagesUC = MockGetCatsImagesUseCase();
+      getCatImagesBloc = GetCatImagesBloc(
+        getCatsImagesUseCase: mockGetCatsImagesUC,
+      );
     });
 
     test('initial state is GetCatImagesInitialState', () {
