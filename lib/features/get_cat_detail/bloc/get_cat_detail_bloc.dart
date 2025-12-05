@@ -3,6 +3,8 @@ import 'package:test_3_35_7/features/get_cat_detail/models/cat.dart';
 
 import 'package:domain/domain.dart';
 
+import 'package:equatable/equatable.dart';
+
 part 'get_cat_detail_event.dart';
 part 'get_cat_detail_state.dart';
 
