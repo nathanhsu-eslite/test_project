@@ -1,13 +1,14 @@
 import 'package:cats_repository/cats_repository.dart';
 import 'package:public_api/public_api.dart';
 
-class GetDetail {
+class GetCatDetailRepo implements GetDetailInterface {
   final CatApiClient _catApiClient;
 
-  GetDetail({required CatApiClient catApiClient})
+  GetCatDetailRepo({required CatApiClient catApiClient})
     : _catApiClient = catApiClient;
 
-  Future<CatDetailEntity> fetchCatDetail(String id) async {
+  @override
+  Future<CatDetailEntity> get(String id) async {
     try {
       final breedModel = await _catApiClient.fetchCatData(id);
       if (breedModel == null) {

@@ -6,15 +6,15 @@ import 'package:public_api/public_api.dart';
 class MockCatApiClient extends Mock implements CatApiClient {}
 
 void main() {
+  late CatApiClient catApiClient;
+  late GetImagesRepo getImages;
+
+  setUpAll(() {
+    catApiClient = MockCatApiClient();
+    getImages = GetImagesRepo(catApiClient: catApiClient);
+  });
+
   group('GetImages', () {
-    late CatApiClient catApiClient;
-    late GetImages getImages;
-
-    setUp(() {
-      catApiClient = MockCatApiClient();
-      getImages = GetImages(catApiClient: catApiClient);
-    });
-
     test(
       'fetchCatImages returns List<CatImageEntity> when api call is successful',
       () async {
@@ -49,7 +49,7 @@ void main() {
         when(
           () => catApiClient.fetchCatsImages(2),
         ).thenAnswer((_) async => imageModels);
-        final result = await getImages.fetchCatsImages(2);
+        final result = await getImages.get(2);
         expect(result, isA<List<CatImageEntity>>());
         expect(result.length, equals(2));
         expect(result, equals(catImageEntity));
@@ -61,17 +61,11 @@ void main() {
       when(
         () => catApiClient.fetchCatsImages(2),
       ).thenThrow(Exception('API Error'));
-      expect(
-        () async => await getImages.fetchCatsImages(2),
-        throwsA(isA<Exception>()),
-      );
+      expect(() async => await getImages.get(2), throwsA(isA<Exception>()));
     });
     test('fetchCatImages throws exception when list is empty', () async {
       when(() => catApiClient.fetchCatsImages(2)).thenAnswer((_) async => []);
-      expect(
-        () async => await getImages.fetchCatsImages(2),
-        throwsA(isA<Exception>()),
-      );
+      expect(() async => await getImages.get(2), throwsA(isA<Exception>()));
     });
   });
 }
