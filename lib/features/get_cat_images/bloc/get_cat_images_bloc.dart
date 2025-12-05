@@ -9,22 +9,25 @@ part 'get_cat_images_state.dart';
 
 class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesState> {
   GetCatImagesBloc({required this.getCatsImagesUC})
-    : super(GetCatImagesInitialState()) {
+      : super(GetCatImagesInitialState()) {
     on<GetCatImages>(_onGetCatImages);
     on<CatImageRefreshed>(_onCatImageRefreshed);
   }
   final GetCatsImagesUC getCatsImagesUC;
-  bool _isFetching = false;
-  final int limit = 5;
+  final int limit = 10;
 
   Future<void> _onGetCatImages(
     GetCatImages event,
     Emitter<GetCatImagesState> emit,
   ) async {
-    if (_isFetching) return;
+    final currentState = state;
+    if (currentState is GetCatImagesSuccessState && currentState.hasReachedMax) {
+      return;
+    }
     try {
-      _isFetching = true;
-      emit(GetCatImagesLoadingState());
+      if (currentState is GetCatImagesInitialState) {
+        emit(GetCatImagesLoadingState());
+      }
       final rsp = await getCatsImagesUC(limit);
       final List<MyImage> images = rsp.map((entity) {
         return MyImage(
@@ -34,13 +37,20 @@ class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesState> {
           height: entity.urlHeight,
         );
       }).toList();
-      emit(GetCatImagesSuccessState(images));
+      if (currentState is GetCatImagesSuccessState) {
+        emit(
+          GetCatImagesSuccessState(
+            currentState.images + images,
+            hasReachedMax: images.length < limit,
+          ),
+        );
+      } else {
+        emit(GetCatImagesSuccessState(images));
+      }
     } catch (e) {
       emit(
         GetCatImagesFailureState("Get cats images failed : ${e.toString()}"),
       );
-    } finally {
-      _isFetching = false;
     }
   }
 
@@ -48,9 +58,7 @@ class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesState> {
     CatImageRefreshed event,
     Emitter<GetCatImagesState> emit,
   ) async {
-    if (_isFetching) return;
     try {
-      _isFetching = true;
       emit(GetCatImagesLoadingState());
       final cats = await getCatsImagesUC(limit);
       emit(
@@ -71,8 +79,6 @@ class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesState> {
       emit(
         GetCatImagesFailureState("Get cats images failed : ${e.toString()}"),
       );
-    } finally {
-      _isFetching = false;
     }
   }
 }

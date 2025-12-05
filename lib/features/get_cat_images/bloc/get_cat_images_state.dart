@@ -13,9 +13,10 @@ final class GetCatImagesLoadingState extends GetCatImagesState {}
 
 final class GetCatImagesSuccessState extends GetCatImagesState {
   final List<MyImage> images;
-  const GetCatImagesSuccessState(this.images);
+  final bool hasReachedMax;
+  const GetCatImagesSuccessState(this.images, {this.hasReachedMax = false});
   @override
-  List<Object> get props => [images];
+  List<Object> get props => [images, hasReachedMax];
 }
 
 final class GetCatImagesFailureState extends GetCatImagesState {
