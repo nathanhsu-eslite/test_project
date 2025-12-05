@@ -9,10 +9,10 @@ part 'get_cat_event.dart';
 part 'get_cat_state.dart';
 
 class GetCatBloc extends Bloc<GetCatDetailEvent, GetCatDetailState> {
-  GetCatBloc(this.getCatDetailUC) : super(GetCatDetailInitialState()) {
+  GetCatBloc(this.getCatsDetailUseCase) : super(GetCatDetailInitialState()) {
     on<GetCatQueried>(_onGetCatDetail);
   }
-  final GetCatDetailUC getCatDetailUC;
+  final GetCatsDetailUseCase getCatsDetailUseCase;
 
   Future<void> _onGetCatDetail(
     GetCatQueried event,
@@ -20,7 +20,7 @@ class GetCatBloc extends Bloc<GetCatDetailEvent, GetCatDetailState> {
   ) async {
     try {
       emit(GetCatDetailLoadingState());
-      final rsp = await getCatDetailUC(event.id);
+      final rsp = await getCatsDetailUseCase(event.id);
       emit(
         CatGetDetailSuccessState(
           Cat(

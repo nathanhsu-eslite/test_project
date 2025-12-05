@@ -6,16 +6,16 @@ import 'package:test_3_35_7/features/get_cat_detail/bloc/get_cat_bloc.dart';
 import 'package:domain/domain.dart';
 import 'package:test_3_35_7/features/get_cat_detail/models/cat.dart';
 
-class MockGetCatDetailUC extends Mock implements GetCatDetailUC {}
+class MockGetCatDetailUseCase extends Mock implements GetCatsDetailUseCase {}
 
 void main() {
   group('GetCatDetailBloc', () {
     late GetCatBloc getCatDetailBloc;
-    late MockGetCatDetailUC mockGetCatDetailUC;
+    late MockGetCatDetailUseCase mockGetCatDetailUseCase;
 
     setUp(() {
-      mockGetCatDetailUC = MockGetCatDetailUC();
-      getCatDetailBloc = GetCatBloc(mockGetCatDetailUC);
+      mockGetCatDetailUseCase = MockGetCatDetailUseCase();
+      getCatDetailBloc = GetCatBloc(mockGetCatDetailUseCase);
     });
 
     test('initial state is GetCatDetailInitialState', () {
@@ -43,7 +43,7 @@ void main() {
         'emits [GetCatDetailLoadingState, CatGetDetailSuccessState] when GetCatDetail is added and succeeds',
         setUp: () {
           when(
-            () => mockGetCatDetailUC.call('id'),
+            () => mockGetCatDetailUseCase.call('id'),
           ).thenAnswer((_) async => catDetailEntity);
         },
         build: () => getCatDetailBloc,
@@ -58,7 +58,7 @@ void main() {
         'emits [GetCatDetailLoadingState, CatGetDetailFailureState] when GetCatDetail is added and fails',
         setUp: () {
           when(
-            () => mockGetCatDetailUC.call('id'),
+            () => mockGetCatDetailUseCase.call('id'),
           ).thenThrow(Exception('Failed to fetch cat detail'));
         },
         build: () => getCatDetailBloc,
