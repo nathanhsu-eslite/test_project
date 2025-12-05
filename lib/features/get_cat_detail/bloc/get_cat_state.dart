@@ -1,4 +1,4 @@
-part of 'get_cat_detail_bloc.dart';
+part of 'get_cat_bloc.dart';
 
 sealed class GetCatDetailState extends Equatable {
   const GetCatDetailState();

@@ -5,17 +5,17 @@ import 'package:domain/domain.dart';
 
 import 'package:equatable/equatable.dart';
 
-part 'get_cat_detail_event.dart';
-part 'get_cat_detail_state.dart';
+part 'get_cat_event.dart';
+part 'get_cat_state.dart';
 
-class GetCatDetailBloc extends Bloc<GetCatDetailEvent, GetCatDetailState> {
-  GetCatDetailBloc(this.getCatDetailUC) : super(GetCatDetailInitialState()) {
-    on<GetCatDetail>(_onGetCatDetail);
+class GetCatBloc extends Bloc<GetCatDetailEvent, GetCatDetailState> {
+  GetCatBloc(this.getCatDetailUC) : super(GetCatDetailInitialState()) {
+    on<GetCatQueried>(_onGetCatDetail);
   }
   final GetCatDetailUC getCatDetailUC;
 
   Future<void> _onGetCatDetail(
-    GetCatDetail event,
+    GetCatQueried event,
     Emitter<GetCatDetailState> emit,
   ) async {
     try {

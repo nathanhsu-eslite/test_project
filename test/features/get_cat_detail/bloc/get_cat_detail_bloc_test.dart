@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:cats_repository/cats_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test_3_35_7/features/get_cat_detail/bloc/get_cat_detail_bloc.dart';
+import 'package:test_3_35_7/features/get_cat_detail/bloc/get_cat_bloc.dart';
 import 'package:domain/domain.dart';
 import 'package:test_3_35_7/features/get_cat_detail/models/cat.dart';
 
@@ -10,12 +10,12 @@ class MockGetCatDetailUC extends Mock implements GetCatDetailUC {}
 
 void main() {
   group('GetCatDetailBloc', () {
-    late GetCatDetailBloc getCatDetailBloc;
+    late GetCatBloc getCatDetailBloc;
     late MockGetCatDetailUC mockGetCatDetailUC;
 
     setUp(() {
       mockGetCatDetailUC = MockGetCatDetailUC();
-      getCatDetailBloc = GetCatDetailBloc(mockGetCatDetailUC);
+      getCatDetailBloc = GetCatBloc(mockGetCatDetailUC);
     });
 
     test('initial state is GetCatDetailInitialState', () {
@@ -39,7 +39,7 @@ void main() {
             'The Abyssinian is easy to care for, and a joy to have in your home. They’re affectionate cats and love both people and other animals.',
       );
 
-      blocTest<GetCatDetailBloc, GetCatDetailState>(
+      blocTest<GetCatBloc, GetCatDetailState>(
         'emits [GetCatDetailLoadingState, CatGetDetailSuccessState] when GetCatDetail is added and succeeds',
         setUp: () {
           when(
@@ -47,14 +47,14 @@ void main() {
           ).thenAnswer((_) async => catDetailEntity);
         },
         build: () => getCatDetailBloc,
-        act: (bloc) => bloc.add(GetCatDetail('id')),
+        act: (bloc) => bloc.add(GetCatQueried('id')),
         expect: () => [
           GetCatDetailLoadingState(),
           CatGetDetailSuccessState(cat),
         ],
       );
 
-      blocTest<GetCatDetailBloc, GetCatDetailState>(
+      blocTest<GetCatBloc, GetCatDetailState>(
         'emits [GetCatDetailLoadingState, CatGetDetailFailureState] when GetCatDetail is added and fails',
         setUp: () {
           when(
@@ -63,7 +63,7 @@ void main() {
         },
         build: () => getCatDetailBloc,
 
-        act: (bloc) => bloc.add(GetCatDetail('id')),
+        act: (bloc) => bloc.add(GetCatQueried('id')),
         expect: () => [
           GetCatDetailLoadingState(),
           CatGetDetailFailureState(
