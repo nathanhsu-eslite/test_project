@@ -151,6 +151,30 @@ void main() {
         expect(result?.breedId, 'hima');
         expect(result?.name, 'Himalayan');
       });
+      // test(
+      //   'throws an DataNotFoundResponseException when breeds is null',
+      //   () async {
+      //     final responseData = {"id": 1};
+      //     final response = Response(
+      //       data: responseData,
+      //       statusCode: 200,
+      //       requestOptions: RequestOptions(path: ''),
+      //     );
+
+      //     when(
+      //       () => mockDio.get(
+      //         any(),
+      //         queryParameters: any(named: 'queryParameters'),
+      //       ),
+      //     ).thenAnswer((_) async => response);
+
+      //     // expect(result, isA<Null>());
+      //     expect(
+      //       () async => await catApiClient.fetchCatData('1'),
+      //       throwsA(isA<DataNotFoundApiClientException>()),
+      //     );
+      //   },
+      // );
 
       test('throws an exception on Dio error', () async {
         when(

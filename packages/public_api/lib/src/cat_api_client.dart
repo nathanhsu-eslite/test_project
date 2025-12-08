@@ -39,7 +39,7 @@ class CatApiClient {
   Future<List<ImageModel>> fetchCatsImages(int limit) async {
     return await get(
       '/images/search',
-      queryParameters: {"limit": limit},
+      queryParameters: {"limit": limit, "has_breeds": true},
       parser: (data) {
         try {
           if (data is! List || data.isEmpty) {
