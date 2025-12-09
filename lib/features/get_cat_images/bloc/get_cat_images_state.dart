@@ -1,34 +1,48 @@
 part of 'get_cat_images_bloc.dart';
 
+enum CatImagesStatus { initial, loading, success, failure, loadingMore }
+
 sealed class GetCatImagesState extends Equatable {
-  const GetCatImagesState();
-
-  @override
-  List<Object> get props => [];
-}
-
-final class GetCatImagesInitialState extends GetCatImagesState {}
-
-final class GetCatImagesLoadingState extends GetCatImagesState {}
-
-final class GetCatImagesSuccessState extends GetCatImagesState {
   final List<MyImage> images;
   final bool hasReachedMax;
-  const GetCatImagesSuccessState(this.images, {this.hasReachedMax = false});
+  final Exception? error;
+  final CatImagesStatus status;
+
+  const GetCatImagesState({
+    this.images = const [],
+    this.hasReachedMax = false,
+    this.error,
+    required this.status,
+  });
+  copyWith();
   @override
-  List<Object> get props => [images, hasReachedMax];
+  List<Object?> get props => [images, hasReachedMax, error, status];
 }
 
-final class GetCatImagesFailureState extends GetCatImagesState {
-  final String error;
-  const GetCatImagesFailureState(this.error);
-  @override
-  List<Object> get props => [error];
-}
+final class GetCatImagesDataState extends GetCatImagesState {
+  const GetCatImagesDataState({
+    required super.status,
+    super.images,
+    super.hasReachedMax,
+    super.error,
+  });
 
-final class GetCatImagesRefreshFailed extends GetCatImagesState {
-  final String error;
-  const GetCatImagesRefreshFailed(this.error);
+  // 複製方法
   @override
-  List<Object> get props => [error];
+  GetCatImagesDataState copyWith({
+    CatImagesStatus? status,
+    List<MyImage>? images,
+    bool? hasReachedMax,
+    Exception? error,
+  }) {
+    return GetCatImagesDataState(
+      status: status ?? this.status,
+      images: images ?? this.images,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+      error: error ?? this.error,
+    );
+  }
+
+  @override
+  List<Object?> get props => [images, status, hasReachedMax, error];
 }
