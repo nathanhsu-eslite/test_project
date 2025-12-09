@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:test_3_35_7/page/home_page/home_page.dart';
-
 import 'package:test_3_35_7/service/service_locator.dart';
 
 void main() {
