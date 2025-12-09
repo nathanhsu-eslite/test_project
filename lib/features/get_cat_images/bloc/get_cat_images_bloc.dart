@@ -10,7 +10,7 @@ part 'get_cat_images_state.dart';
 
 class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesDataState> {
   GetCatImagesBloc({required this.getCatsImagesUseCase})
-      : super(const GetCatImagesDataState(status: CatImagesStatus.initial)) {
+    : super(const GetCatImagesDataState(status: CatImagesStatus.initial)) {
     on<GetCatImages>(_onGetCatImages);
     on<CatImageRefreshed>(_onCatImageRefreshed);
   }
@@ -35,7 +35,13 @@ class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesDataState> {
       }).toList();
 
       if (newImages.isEmpty) {
-        throw ImagesIsEmptyBlocException();
+        emit(
+          state.copyWith(
+            status: CatImagesStatus.failure,
+            error: ImagesIsEmptyBlocException(),
+          ),
+        );
+        return;
       }
 
       emit(
@@ -83,7 +89,13 @@ class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesDataState> {
 
       if (newImages.isEmpty) {
         if (isInitialLoad) {
-          throw ImagesIsEmptyBlocException();
+          emit(
+            state.copyWith(
+              status: CatImagesStatus.failure,
+              error: ImagesIsEmptyBlocException(),
+            ),
+          );
+          return;
         } else {
           emit(
             state.copyWith(
