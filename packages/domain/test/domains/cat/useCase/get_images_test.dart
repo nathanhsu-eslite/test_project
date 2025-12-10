@@ -2,39 +2,42 @@ import 'package:cats_repository/cats_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/src/domains/cat/cat.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
-// Mocks
-class MockGetDetailUC extends Mock implements GetCatDetailUC {}
-
-class MockGetImagesUC extends Mock implements GetCatsImagesUC {}
-
-class MockDio extends Mock implements Dio {}
+import 'package:http_mock_adapter/http_mock_adapter.dart';
 
 void main() {
   group('GetCatsImages', () {
-    late MockGetImagesUC mockGetImages;
+    late GetCatsImagesUseCase getImagesUC;
+    late Dio dio;
+    late DioAdapter dioAdapter;
 
     setUp(() {
-      mockGetImages = MockGetImagesUC();
+      dio = Dio(BaseOptions(baseUrl: 'https://api.thecatapi.com/v1'));
+      dioAdapter = DioAdapter(dio: dio);
+      getImagesUC = GetCatsImagesUC.dio(dio: dio);
     });
+
     test('should get cat images from the repository', () async {
       // arrange
       const limit = 2;
-      final catImageEntities = [
-        CatImageEntity(id: '1', url: 'https://1', urlWidth: 0, urlHeight: 0),
-        CatImageEntity(id: '2', url: 'https://2', urlHeight: 10, urlWidth: 10),
+      const path = '/images/search';
+      final catImagesJson = [
+        {'id': '1', 'url': 'https://1', 'width': 0, 'height': 0},
+        {'id': '2', 'url': 'https://2', 'width': 10, 'height': 10},
       ];
-      when(
-        () => mockGetImages.call(limit),
-      ).thenAnswer((_) async => catImageEntities);
+
+      dioAdapter.onGet(
+        path,
+        (server) => server.reply(200, catImagesJson),
+        queryParameters: {'limit': limit},
+      );
+
       // act
-      final result = await mockGetImages.call(limit);
+      final result = await getImagesUC.call(limit);
+
       // assert
-      expect(result, catImageEntities);
-      expect(result[1].url, catImageEntities[1].url);
-      verify(() => mockGetImages.call(limit));
-      verifyNoMoreInteractions(mockGetImages);
+      expect(result, isA<List<CatImageEntity>>());
+      expect(result.length, 2);
+      expect(result[1].url, 'https://2');
     });
   });
 }
