@@ -1,5 +1,5 @@
+import 'package:data/src/api/cat_api/cat_api.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:public_api/public_api.dart';
 
 void main() {
   group('WeightModel', () {

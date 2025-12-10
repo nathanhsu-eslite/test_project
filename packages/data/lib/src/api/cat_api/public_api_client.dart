@@ -1,5 +1,5 @@
+import 'package:data/src/api/cat_api/models/models.dart';
 import 'package:dio/dio.dart';
-import 'package:public_api/src/models/models.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'public_api_client.g.dart';

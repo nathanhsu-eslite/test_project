@@ -1,10 +1,9 @@
 import 'dart:convert';
 
+import 'package:data/src/api/cat_api/cat_api.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
-import 'package:public_api/src/models/models.dart';
-import 'package:public_api/src/public_api_client.dart';
 
 void main() {
   group('PublicApiClient', () {
