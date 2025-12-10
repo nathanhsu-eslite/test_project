@@ -8,8 +8,8 @@ class GetCatDetailUC implements GetCatsDetailUseCase {
   GetCatDetailUC({required this.getDetailRepo});
 
   factory GetCatDetailUC.dio({required Dio dio}) {
-    final api = CatApiClient(dio);
-    return GetCatDetailUC(getDetailRepo: GetCatDetailRepo(catApiClient: api));
+    final api = PublicApiClient(dio);
+    return GetCatDetailUC(getDetailRepo: GetCatDetailRepo(apiClient: api));
   }
 
   @override
