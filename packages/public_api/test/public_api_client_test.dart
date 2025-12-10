@@ -1,30 +1,25 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:public_api/src/public_api_client.dart';
+import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:public_api/src/models/models.dart';
-
-class MockDio extends Mock implements Dio {}
-
-class FakeRequestOptions extends Fake implements RequestOptions {}
+import 'package:public_api/src/public_api_client.dart';
 
 void main() {
-  setUpAll(() {
-    registerFallbackValue(FakeRequestOptions());
-  });
-
   group('PublicApiClient', () {
     late Dio dio;
+    late DioAdapter dioAdapter;
     late PublicApiClient publicApiClient;
+    const baseUrl = 'https://api.thecatapi.com/v1';
 
     setUp(() {
-      dio = MockDio();
-      when(() => dio.options).thenReturn(BaseOptions());
+      dio = Dio(BaseOptions(baseUrl: baseUrl));
+      dioAdapter = DioAdapter(dio: dio);
       publicApiClient = PublicApiClient(dio);
     });
 
     group('fetchCatsImages', () {
       test('returns a list of ImageModel on successful fetch', () async {
+        const path = '/images/search';
         final responseData = [
           {
             'id': '1',
@@ -32,36 +27,45 @@ void main() {
             'width': 100,
             'height': 100,
           },
+          {
+            'id': '2',
+            'url': 'http://some.url/cat.jpg',
+            'width': 100,
+            'height': 100,
+          },
         ];
-        final response = Response<List<dynamic>>(
-          // Specify generic type here
-          data: responseData,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        );
 
-        when(
-          () => dio.fetch<List<dynamic>>(any<RequestOptions>()),
-        ).thenAnswer((_) async => response);
+        dioAdapter.onGet(path, (server) => server.reply(200, responseData));
 
         final result = await publicApiClient.fetchCatsImages(1);
 
         expect(result, isA<List<ImageModel>>());
-        expect(result.length, 1);
-        expect(result.first.id, '1');
+        expect(result.length, 2);
+        expect(result.first.url, 'http://some.url/cat.jpg');
       });
 
       test('throws an exception on failed fetch', () async {
-        when(
-          () => dio.fetch<List<dynamic>>(any<RequestOptions>()),
-        ).thenThrow(Exception('Failed to fetch'));
+        const path = '/images/search';
+        dioAdapter.onGet(
+          path,
+          (server) => server.throws(
+            500,
+            DioException(requestOptions: RequestOptions(path: '')),
+          ),
+          queryParameters: {'limit': 1, 'has_breeds': true},
+        );
 
-        expect(() => publicApiClient.fetchCatsImages(1), throwsException);
+        expect(
+          () => publicApiClient.fetchCatsImages(1),
+          throwsA(isA<DioException>()),
+        );
       });
     });
 
     group('fetchCatData', () {
       test('returns an ImageModel on successful fetch', () async {
+        const id = 'testId';
+        const path = '/images/$id';
         final responseData = {
           'id': 'testId',
           'url': 'http://some.url/cat.jpg',
@@ -107,23 +111,9 @@ void main() {
           ],
         };
 
-        final response = Response<Map<String, dynamic>>(
-          data: responseData,
-          statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
-        );
+        dioAdapter.onGet(path, (server) => server.reply(200, responseData));
 
-        when(
-          () => dio.fetch<Map<String, dynamic>>(
-            any(
-              that: predicate<RequestOptions>(
-                (options) => options.path.startsWith('/images/'),
-              ),
-            ),
-          ),
-        ).thenAnswer((_) async => response);
-
-        final result = await publicApiClient.fetchCatData('testId');
+        final result = await publicApiClient.fetchCatData(id);
         final breedModel = result.breeds!.first;
 
         expect(breedModel, isA<BreedModel>());
@@ -132,17 +122,20 @@ void main() {
       });
 
       test('throws an exception on failed fetch', () async {
-        when(
-          () => dio.fetch<Map<String, dynamic>>(
-            any(
-              that: predicate<RequestOptions>(
-                (options) => options.path.startsWith('/images/'),
-              ),
-            ),
+        const id = 'testId';
+        const path = '/images/$id';
+        dioAdapter.onGet(
+          path,
+          (server) => server.throws(
+            500,
+            DioException(requestOptions: RequestOptions(path: '')),
           ),
-        ).thenThrow(Exception('Failed to fetch cat data'));
+        );
 
-        expect(() => publicApiClient.fetchCatData('testId'), throwsException);
+        expect(
+          () => publicApiClient.fetchCatData(id),
+          throwsA(isA<DioException>()),
+        );
       });
     });
   });
