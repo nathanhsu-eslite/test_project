@@ -39,13 +39,19 @@ dependencies:
   get_it: ^9.1.1
   equatable: ^2.0.7
 
-  public_api:
-    path: packages/public_api
+  domain:
+    path: packages/domain
+  cats_repository:
+    path: packages/cats_repository
+    
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^2.10.4
+  build_runner: ^2.4.9
+  bloc_test: ^10.0.0
+  mocktail: ^1.0.4
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
