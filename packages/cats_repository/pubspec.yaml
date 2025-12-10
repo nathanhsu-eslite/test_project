@@ -14,8 +14,8 @@ dependencies:
   equatable: ^2.0.0
   json_annotation: ^4.9.0
 
-  public_api:
-    path: ../public_api
+  data:
+    path: ../data
 
 
 dev_dependencies:

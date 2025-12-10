@@ -1,5 +1,5 @@
 import 'package:cats_repository/cats_repository.dart';
-import 'package:public_api/public_api.dart';
+import 'package:data/data.dart';
 
 class GetCatDetailRepo implements GetDetailInterface {
   final PublicApiClient _apiClient;
