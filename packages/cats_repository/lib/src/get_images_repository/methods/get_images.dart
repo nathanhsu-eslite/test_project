@@ -3,13 +3,12 @@ import 'package:cats_repository/src/get_images_repository/methods/get_images_int
 import 'package:public_api/public_api.dart';
 
 class GetImagesRepo implements GetImagesInterface {
-  final CatApiClient _catApiClient;
+  final PublicApiClient _apiClient;
 
-  GetImagesRepo({required CatApiClient catApiClient})
-    : _catApiClient = catApiClient;
+  GetImagesRepo({required PublicApiClient apiClient}) : _apiClient = apiClient;
 
   @override
-  Future<List<CatImageEntity>> get(int limit) => _catApiClient
+  Future<List<CatImageEntity>> get(int limit) => _apiClient
       .fetchCatsImages(limit)
       .then((catList) {
         List<CatImageEntity> cats = [];
