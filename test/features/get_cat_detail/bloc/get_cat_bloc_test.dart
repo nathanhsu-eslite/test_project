@@ -11,7 +11,7 @@ class MockGetCatDetailUseCase extends Mock implements GetCatsDetailUseCase {}
 void main() {
   group('GetCatDetailBloc', () {
     late GetCatBloc getCatDetailBloc;
-    late MockGetCatDetailUseCase mockGetCatDetailUseCase;
+    late GetCatsDetailUseCase mockGetCatDetailUseCase;
 
     setUp(() {
       mockGetCatDetailUseCase = MockGetCatDetailUseCase();

@@ -12,7 +12,7 @@ class MockGetCatsImagesUseCase extends Mock implements GetCatsImagesUseCase {}
 void main() {
   group('GetCatImagesBloc', () {
     late GetCatImagesBloc getCatImagesBloc;
-    late MockGetCatsImagesUseCase mockGetCatsImagesUC;
+    late GetCatsImagesUseCase mockGetCatsImagesUC;
 
     setUp(() {
       mockGetCatsImagesUC = MockGetCatsImagesUseCase();
@@ -134,8 +134,9 @@ void main() {
       blocTest<GetCatImagesBloc, GetCatImagesDataState>(
         'emits [loading, success] with new images when refreshed',
         setUp: () {
-          when(() => mockGetCatsImagesUC(7))
-              .thenAnswer((_) async => newCatImagesEntity);
+          when(
+            () => mockGetCatsImagesUC(7),
+          ).thenAnswer((_) async => newCatImagesEntity);
         },
         seed: () => GetCatImagesDataState(
           status: CatImagesStatus.success,
