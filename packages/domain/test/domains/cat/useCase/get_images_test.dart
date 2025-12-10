@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cats_repository/cats_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/src/domains/cat/cat.dart';
@@ -20,14 +22,14 @@ void main() {
       // arrange
       const limit = 2;
       const path = '/images/search';
-      final catImagesJson = [
-        {'id': '1', 'url': 'https://1', 'width': 0, 'height': 0},
-        {'id': '2', 'url': 'https://2', 'width': 10, 'height': 10},
-      ];
+      final catImagesJson = r"""[
+        {"id": "1", "url": "https://1", "width": 0, "height": 0},
+        {"id": "2", "url": "https://2", "width": 10, "height": 10}
+      ]""";
 
       dioAdapter.onGet(
         path,
-        (server) => server.reply(200, catImagesJson),
+        (server) => server.reply(200, jsonDecode(catImagesJson)),
         queryParameters: {'limit': limit},
       );
 

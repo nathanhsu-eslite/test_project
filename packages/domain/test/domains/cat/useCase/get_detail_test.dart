@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cats_repository/cats_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
@@ -20,12 +22,12 @@ void main() {
       // arrange
       const catId = '1';
       const path = '/images/$catId';
-      final catDetailJson = {
-        'id': catId,
-        'url': 'https://example.com/cat.jpg',
-        'width': 800,
-        'height': 600,
-        'breeds': [
+      final catDetailJson = """{ 
+        "id": "1",
+        "url": "https://example.com/cat.jpg",
+        "width": 800,
+        "height": 600,
+        "breeds": [
           {
             "weight": {"imperial": "7 - 14", "metric": "3 - 6"},
             "id": "hima",
@@ -65,12 +67,15 @@ void main() {
             "short_legs": 0,
             "wikipedia_url": "https://en.wikipedia.org/wiki/Himalayan_(cat)",
             "hypoallergenic": 0,
-            "reference_image_id": "CDhOtM-Ig",
-          },
-        ],
-      };
+            "reference_image_id": "CDhOtM-Ig"
+          }
+        ]
+      }""";
 
-      dioAdapter.onGet(path, (server) => server.reply(200, catDetailJson));
+      dioAdapter.onGet(
+        path,
+        (server) => server.reply(200, jsonDecode(catDetailJson)),
+      );
 
       // act
       final result = await getDetailUC.call(catId);
