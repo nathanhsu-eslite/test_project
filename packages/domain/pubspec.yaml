@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   dio: ^5.9.0
+  path_provider: ^2.1.5
 
   cats_repository:
     path: ../cats_repository
@@ -26,6 +27,7 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   mocktail: ^1.0.4
   http_mock_adapter: ^0.6.1
+  path_provider_platform_interface: ^2.0.0
 
 
 
