@@ -1,8 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'breeds.dart';
+
 part 'image.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ImageModel {
   final String id;
   final String url;
@@ -10,12 +12,14 @@ class ImageModel {
   final int urlHeight;
   @JsonKey(name: 'width')
   final int urlWidth;
+  final List<BreedModel>? breeds;
 
   ImageModel({
     required this.id,
     required this.url,
     required this.urlHeight,
     required this.urlWidth,
+    this.breeds,
   });
   factory ImageModel.fromJson(Map<String, dynamic> json) =>
       _$ImageModelFromJson(json);

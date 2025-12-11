@@ -2,18 +2,19 @@ import 'package:cats_repository/cats_repository.dart';
 import 'package:public_api/public_api.dart';
 
 class GetCatDetailRepo implements GetDetailInterface {
-  final CatApiClient _catApiClient;
+  final PublicApiClient _apiClient;
 
-  GetCatDetailRepo({required CatApiClient catApiClient})
-    : _catApiClient = catApiClient;
+  GetCatDetailRepo({required PublicApiClient apiClient})
+    : _apiClient = apiClient;
 
   @override
   Future<CatDetailEntity> get(String id) async {
     try {
-      final breedModel = await _catApiClient.fetchCatData(id);
-      if (breedModel == null) {
+      final imageModel = await _apiClient.fetchCatData(id);
+      if (imageModel.breeds?.isEmpty == true) {
         throw Exception("No breed information available for cat id: $id");
       }
+      final breedModel = imageModel.breeds!.first;
       return CatDetailEntity(
         breedName: breedModel.name,
         temperament: breedModel.temperament,
