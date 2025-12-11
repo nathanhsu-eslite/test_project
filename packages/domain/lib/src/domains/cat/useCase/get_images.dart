@@ -8,8 +8,8 @@ class GetCatsImagesUC implements GetCatsImagesUseCase {
   GetCatsImagesUC({required this.getImages});
 
   factory GetCatsImagesUC.dio({required Dio dio}) {
-    final api = CatApiClient(dio);
-    return GetCatsImagesUC(getImages: GetImagesRepo(catApiClient: api));
+    final api = PublicApiClient(dio);
+    return GetCatsImagesUC(getImages: GetImagesRepo(apiClient: api));
   }
 
   @override
