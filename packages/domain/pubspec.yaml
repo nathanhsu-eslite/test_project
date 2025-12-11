@@ -16,8 +16,8 @@ dependencies:
   cats_repository:
     path: ../cats_repository
 
-  public_api:
-    path: ../public_api
+  data:
+    path: ../data
  
 
 dev_dependencies:

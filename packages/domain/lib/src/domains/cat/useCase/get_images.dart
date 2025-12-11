@@ -1,7 +1,7 @@
 import 'package:cats_repository/cats_repository.dart';
+import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/src/domains/cat/domain.dart';
-import 'package:public_api/public_api.dart';
 
 class GetCatsImagesUC implements GetCatsImagesUseCase {
   final GetImagesRepo getImages;
