@@ -1,7 +1,7 @@
 import 'package:cats_repository/cats_repository.dart';
+import 'package:data/data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:public_api/public_api.dart';
 
 class MockPublicApiClient extends Mock implements PublicApiClient {}
 
