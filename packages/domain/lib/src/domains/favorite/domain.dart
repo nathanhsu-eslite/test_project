@@ -15,3 +15,7 @@ abstract class DeleteFavoriteUseCase {
 abstract class GetAllFavoriteUseCase {
   Future<List<Favorite>> call();
 }
+
+abstract class AddFavoriteUseCase {
+  Future<void> call(Favorite favorite);
+}
