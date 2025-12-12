@@ -38,8 +38,9 @@ void main() {
       final rsp = await favoriteCat.query();
       expect(rsp, isEmpty);
     });
-    test('add and query', () async {
-      box.put(_Data.mockFavorite);
+
+    test('add ', () async {
+      await favoriteCat.add(_Data.mockFavorite1);
 
       final favorites = await favoriteCat.query();
       expect(favorites, hasLength(1));
@@ -48,15 +49,15 @@ void main() {
     });
 
     test('find', () async {
-      box.put(_Data.mockFavorite);
-      box.put(_Data.mockFavorite2);
+      await favoriteCat.add(_Data.mockFavorite1);
+      await favoriteCat.add(_Data.mockFavorite2);
       final found = await favoriteCat.find('Siamese');
       expect(found, hasLength(1));
       expect(found.first.imageId, '1');
     });
 
     test('delete', () async {
-      box.put(_Data.mockFavorite);
+      await favoriteCat.add(_Data.mockFavorite1);
 
       var favorites = await favoriteCat.query();
       expect(favorites, hasLength(1));
@@ -70,8 +71,8 @@ void main() {
     });
 
     test('clear', () async {
-      box.put(_Data.mockFavorite);
-      box.put(_Data.mockFavorite2);
+      await favoriteCat.add(_Data.mockFavorite1);
+      await favoriteCat.add(_Data.mockFavorite2);
 
       var favorites = await favoriteCat.query();
       expect(favorites, hasLength(2));
@@ -86,7 +87,7 @@ void main() {
 }
 
 class _Data {
-  static Favorite mockFavorite = Favorite(
+  static Favorite mockFavorite1 = Favorite(
     url: 'http://1',
     urlHeight: 100,
     urlWidth: 100,

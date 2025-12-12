@@ -6,6 +6,7 @@ abstract interface class FavoriteInterface {
   Future<bool> delete(int id);
   Future<List<Favorite>> query();
   Future<List<Favorite>> find(String name);
+  Future<void> add(Favorite favorite);
 }
 
 class FavoriteCatDB implements FavoriteInterface {
@@ -50,6 +51,15 @@ class FavoriteCatDB implements FavoriteInterface {
       List<Favorite> list = query.find();
       query.close();
       return list;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> add(Favorite favorite) async {
+    try {
+      _box.put(favorite);
     } catch (e) {
       rethrow;
     }

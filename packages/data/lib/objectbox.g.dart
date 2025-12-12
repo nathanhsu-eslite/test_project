@@ -12,7 +12,7 @@ import 'package:flat_buffers/flat_buffers.dart' as fb;
 import 'package:objectbox/internal.dart'
     as obx_int; // generated code can access "internal" functionality
 import 'package:objectbox/objectbox.dart' as obx;
-import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
+import 'package:objectbox_sync_flutter_libs/objectbox_sync_flutter_libs.dart';
 
 import 'src/db/favorite/schema/favorite.dart';
 
