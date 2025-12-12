@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_3_35_7/features/get_cat_images/models/my_image.dart';
+import 'package:test_3_35_7/pages/detail_page/detail_page.dart';
 
 class ImagesList extends StatelessWidget {
   const ImagesList({
@@ -27,12 +28,12 @@ class ImagesList extends StatelessWidget {
         final image = images[index];
         return GestureDetector(
           onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => CatDetailPage(image: image),
-            //   ),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CatDetailPage(image: image),
+              ),
+            );
           },
           child: Card(
             margin: const EdgeInsets.all(8.0),
