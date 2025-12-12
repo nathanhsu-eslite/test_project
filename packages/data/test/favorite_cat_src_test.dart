@@ -48,12 +48,20 @@ void main() {
       expect(favorites.first.breedName, 'Siamese');
     });
 
-    test('find', () async {
+    test('find by exact name', () async {
       await favoriteCat.add(_Data.mockFavorite1);
       await favoriteCat.add(_Data.mockFavorite2);
       final found = await favoriteCat.find('Siamese');
       expect(found, hasLength(1));
       expect(found.first.imageId, '1');
+    });
+
+    test('find by partial name', () async {
+      await favoriteCat.add(_Data.mockFavorite1);
+      await favoriteCat.add(_Data.mockFavorite2);
+      final found = await favoriteCat.find('Per');
+      expect(found, hasLength(1));
+      expect(found.first.imageId, '2');
     });
 
     test('delete', () async {
@@ -99,6 +107,6 @@ class _Data {
     urlHeight: 100,
     urlWidth: 100,
     imageId: '2',
-    breedName: 'Siamese2',
+    breedName: 'Persian',
   );
 }

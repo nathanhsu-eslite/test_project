@@ -45,9 +45,8 @@ class FavoriteCatDB implements FavoriteInterface {
   @override
   Future<List<Favorite>> find(name) async {
     try {
-      final Query<Favorite> query = _box
-          .query(Favorite_.breedName.equals(name))
-          .build();
+      final Query<Favorite> query =
+          _box.query(Favorite_.breedName.contains(name, caseSensitive: false)).build();
       List<Favorite> list = query.find();
       query.close();
       return list;
