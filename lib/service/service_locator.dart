@@ -7,4 +7,5 @@ final getIt = GetIt.instance;
 void setupLocator() {
   getIt.registerLazySingleton(() => Dio());
   getIt.registerLazySingleton(() => GetCatsImagesUC.dio(dio: getIt<Dio>()));
+  getIt.registerLazySingleton(() => GetCatDetailUC.dio(dio: getIt<Dio>()));
 }
