@@ -15,7 +15,9 @@ void main() {
 
     setUp(() {
       mockGetCatDetailUseCase = MockGetCatDetailUseCase();
-      getCatDetailBloc = GetCatBloc(mockGetCatDetailUseCase);
+      getCatDetailBloc = GetCatBloc(
+        getCatsDetailUseCase: mockGetCatDetailUseCase,
+      );
     });
 
     test('initial state is GetCatDetailInitialState', () {
@@ -29,6 +31,7 @@ void main() {
         origin: 'Egypt',
         description:
             'The Abyssinian is easy to care for, and a joy to have in your home. They’re affectionate cats and love both people and other animals.',
+        lifeSpan: '12 - 14',
       );
 
       final cat = Cat(
@@ -37,6 +40,7 @@ void main() {
         origin: 'Egypt',
         description:
             'The Abyssinian is easy to care for, and a joy to have in your home. They’re affectionate cats and love both people and other animals.',
+        lifeSpan: '12 - 14',
       );
 
       blocTest<GetCatBloc, GetCatDetailState>(

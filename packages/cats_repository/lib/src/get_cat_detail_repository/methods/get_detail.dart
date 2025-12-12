@@ -20,6 +20,7 @@ class GetCatDetailRepo implements GetDetailInterface {
         temperament: breedModel.temperament,
         origin: breedModel.origin,
         description: breedModel.description,
+        lifeSpan: breedModel.lifeSpan,
       );
     } on Exception catch (_) {
       rethrow;

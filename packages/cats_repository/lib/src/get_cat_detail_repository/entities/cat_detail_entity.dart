@@ -5,8 +5,10 @@ class CatDetailEntity extends Equatable {
   final String temperament;
   final String origin;
   final String description;
+  final String lifeSpan;
 
   const CatDetailEntity({
+    required this.lifeSpan,
     required this.breedName,
     required this.temperament,
     required this.origin,
@@ -14,5 +16,11 @@ class CatDetailEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [breedName, temperament, origin, description];
+  List<Object?> get props => [
+    breedName,
+    temperament,
+    origin,
+    description,
+    lifeSpan,
+  ];
 }
