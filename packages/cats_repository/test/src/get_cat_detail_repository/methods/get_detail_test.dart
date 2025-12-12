@@ -54,6 +54,7 @@ class _Data {
     origin: "EG",
     description:
         'The Abyssinian is a breed of domestic short-haired cat with a distinctive "ticked" tabby coat, in which individual hairs are banded with different colors.',
+    lifeSpan: '14 - 15',
   );
   static BreedModel breedModel = BreedModel(
     breedId: '1',

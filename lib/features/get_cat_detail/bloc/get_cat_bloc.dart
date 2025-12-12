@@ -9,7 +9,8 @@ part 'get_cat_event.dart';
 part 'get_cat_state.dart';
 
 class GetCatBloc extends Bloc<GetCatDetailEvent, GetCatDetailState> {
-  GetCatBloc(this.getCatsDetailUseCase) : super(GetCatDetailInitialState()) {
+  GetCatBloc({required this.getCatsDetailUseCase})
+    : super(GetCatDetailInitialState()) {
     on<GetCatQueried>(_onGetCatDetail);
   }
   final GetCatsDetailUseCase getCatsDetailUseCase;
@@ -28,6 +29,7 @@ class GetCatBloc extends Bloc<GetCatDetailEvent, GetCatDetailState> {
             temperament: rsp.temperament,
             origin: rsp.origin,
             description: rsp.description,
+            lifeSpan: rsp.lifeSpan,
           ),
         ),
       );
