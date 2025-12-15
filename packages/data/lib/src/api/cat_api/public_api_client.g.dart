@@ -2,11 +2,13 @@
 
 part of 'public_api_client.dart';
 
+// dart format off
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter,avoid_unused_constructor_parameters,unreachable_from_main
 
 class _PublicApiClient implements PublicApiClient {
   _PublicApiClient(this._dio, {this.baseUrl, this.errorLogger}) {
@@ -29,7 +31,8 @@ class _PublicApiClient implements PublicApiClient {
       r'limit': limit,
       r'has_breeds': hasBreeds,
     };
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'x-api-key': ''};
+    _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<List<ImageModel>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
@@ -58,7 +61,8 @@ class _PublicApiClient implements PublicApiClient {
   Future<ImageModel> fetchCatData(String id) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'x-api-key': ''};
+    _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<ImageModel>(
       Options(method: 'GET', headers: _headers, extra: _extra)
@@ -108,3 +112,5 @@ class _PublicApiClient implements PublicApiClient {
     return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }
+
+// dart format on
