@@ -43,7 +43,8 @@ dependencies:
     path: packages/domain
   cats_repository:
     path: packages/cats_repository
-    
+  data:
+    path: packages/data
 
 dev_dependencies:
   flutter_test:

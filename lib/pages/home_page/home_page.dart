@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_3_35_7/features/get_cat_images/bloc/get_cat_images_bloc.dart';
 import 'package:test_3_35_7/page/error_page.dart';
+import 'package:test_3_35_7/pages/favorite_list_page/favorite_page.dart';
 import 'package:test_3_35_7/pages/home_page/widget/images_list.dart';
 
 import 'package:test_3_35_7/service/service_locator.dart';
@@ -19,6 +20,15 @@ class MyHomePage extends StatelessWidget {
             ..add(GetCatImages()),
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FavoriteListPage()),
+              );
+            },
+            icon: Icon(Icons.favorite_sharp),
+          ),
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(title),
         ),
