@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:test_3_35_7/features/favorite/blocs/blocs.dart';
 import 'package:test_3_35_7/features/favorite/models/favorite_cat.dart';
 import 'package:test_3_35_7/features/get_cat_images/models/my_image.dart';
+import 'package:test_3_35_7/routes/detail_route.dart';
 
 class FavoriteList extends StatelessWidget {
   final List<FavoriteCat> favorites;
@@ -26,15 +26,14 @@ class FavoriteList extends StatelessWidget {
         final favorite = favorites[index];
         return GestureDetector(
           onTap: () {
-            context.go(
-              '/detail',
-              extra: MyImage(
+            DetailRoute(
+              MyImage(
                 id: favorite.imageId,
                 url: favorite.url,
                 height: favorite.urlHeight,
                 width: favorite.urlWidth,
               ),
-            );
+            ).push(context);
           },
           child: Card(
             margin: const EdgeInsets.all(8.0),

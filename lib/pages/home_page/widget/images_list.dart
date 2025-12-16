@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:test_3_35_7/features/get_cat_images/models/my_image.dart';
+import 'package:test_3_35_7/routes/detail_route.dart';
 
 class ImagesList extends StatelessWidget {
   const ImagesList({
@@ -28,7 +28,7 @@ class ImagesList extends StatelessWidget {
         final image = images[index];
         return GestureDetector(
           onTap: () {
-            context.go('/detail', extra: image);
+            DetailRoute(image).push(context);
           },
           child: Card(
             margin: const EdgeInsets.all(8.0),

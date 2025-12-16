@@ -2,9 +2,9 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_3_35_7/features/get_cat_images/bloc/get_cat_images_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:test_3_35_7/page/error_page.dart';
 import 'package:test_3_35_7/pages/home_page/widget/images_list.dart';
+import 'package:test_3_35_7/routes/favorite_route.dart';
 
 import 'package:test_3_35_7/service/service_locator.dart';
 
@@ -21,7 +21,7 @@ class MyHomePage extends StatelessWidget {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
-              context.go('/favorite');
+              FavoriteRoute().push(context);
             },
             icon: const Icon(Icons.favorite_sharp),
           ),
