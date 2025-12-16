@@ -2,15 +2,14 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_3_35_7/features/get_cat_images/bloc/get_cat_images_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:test_3_35_7/page/error_page.dart';
-import 'package:test_3_35_7/pages/favorite_list_page/favorite_page.dart';
 import 'package:test_3_35_7/pages/home_page/widget/images_list.dart';
 
 import 'package:test_3_35_7/service/service_locator.dart';
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +21,12 @@ class MyHomePage extends StatelessWidget {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FavoriteListPage()),
-              );
+              context.go('/favorite');
             },
-            icon: Icon(Icons.favorite_sharp),
+            icon: const Icon(Icons.favorite_sharp),
           ),
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(title),
+          title: const Text('cats'),
         ),
         body: const HomeView(),
       ),
