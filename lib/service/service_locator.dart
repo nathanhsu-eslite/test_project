@@ -33,4 +33,5 @@ void setupLocator({required Store store}) {
   );
   getIt.registerLazySingleton(() => GetCatsImagesUC.dio(dio: getIt<Dio>()));
   getIt.registerLazySingleton(() => GetCatDetailUC.dio(dio: getIt<Dio>()));
+  getIt.registerLazySingleton(() => GetMatchResultUC.dio(dio: getIt<Dio>()));
 }
