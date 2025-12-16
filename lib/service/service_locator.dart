@@ -3,6 +3,7 @@ import 'package:data/objectbox.g.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:get_it/get_it.dart';
+import 'package:test_3_35_7/consts.dart';
 
 final getIt = GetIt.instance;
 
@@ -27,7 +28,9 @@ void setupLocator({required Store store}) {
     () => AddFavoriteUC.create(db: getIt<FavoriteInterface>()),
   );
 
-  getIt.registerLazySingleton(() => Dio());
+  getIt.registerLazySingleton(
+    () => Dio(BaseOptions(headers: {'x-api-key': Consts.apiKey})),
+  );
   getIt.registerLazySingleton(() => GetCatsImagesUC.dio(dio: getIt<Dio>()));
   getIt.registerLazySingleton(() => GetCatDetailUC.dio(dio: getIt<Dio>()));
 }

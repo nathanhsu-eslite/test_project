@@ -1,0 +1,3 @@
+class Consts {
+  static const String apiKey = String.fromEnvironment('API_KEY');
+}

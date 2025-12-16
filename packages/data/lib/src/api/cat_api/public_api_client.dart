@@ -4,10 +4,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'public_api_client.g.dart';
 
-@RestApi(
-  baseUrl: 'https://api.thecatapi.com/v1',
-  headers: {'x-api-key': String.fromEnvironment('API_KEY')},
-)
+@RestApi(baseUrl: 'https://api.thecatapi.com/v1')
 abstract class PublicApiClient {
   factory PublicApiClient(Dio dio) = _PublicApiClient;
 
