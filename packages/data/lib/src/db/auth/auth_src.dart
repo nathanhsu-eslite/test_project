@@ -36,6 +36,11 @@ class AuthDB implements AuthDBInterface {
   @override
   Future<void> register(String username, String password) async {
     try {
+      final Query<UserEntity> query =
+          _box.query(UserEntity_.username.equals(username)).build();
+      UserEntity? userEntity = query.findUnique();
+      query.close();
+      if (userEntity != null) throw UsernameAlreadyExistsAuthException;
       _box.put(
         UserEntity(username: username, encryptedPassword: password.encrypt()),
       );

@@ -21,7 +21,7 @@ void main() {
     authDB = AuthDB(store: store);
   });
 
-  tearDown(() {
+  tearDownAll(() {
     box.removeAll();
     store.close();
   });
@@ -45,6 +45,13 @@ void main() {
       expect(
         () async => await authDB.login('nonexistent', 'password'),
         throwsA(UserNotFindAuthException),
+      );
+    });
+    test('register with existing username throws exception', () async {
+      await authDB.register('testUser', 'password');
+      expect(
+        () async => await authDB.register('testUser', 'password'),
+        throwsA(UsernameAlreadyExistsAuthException),
       );
     });
 
