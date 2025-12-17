@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
+
       routerConfig: GoRouter(
         routes: routes,
         initialLocation: HomeRoute().location,

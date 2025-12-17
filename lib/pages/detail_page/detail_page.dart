@@ -6,8 +6,9 @@ import 'package:test_3_35_7/features/favorite/blocs/delete_favorite/delete_favor
 import 'package:test_3_35_7/features/favorite/blocs/find_favorite/find_favorite_bloc.dart';
 import 'package:test_3_35_7/features/get_cat_detail/bloc/get_cat_bloc.dart';
 import 'package:test_3_35_7/features/get_cat_images/models/my_image.dart';
-import 'package:test_3_35_7/page/error_page.dart';
+
 import 'package:test_3_35_7/pages/detail_page/widget/detail_widget.dart';
+import 'package:test_3_35_7/pages/error_page/error_page.dart';
 import 'package:test_3_35_7/service/service_locator.dart';
 
 class CatDetailPage extends StatelessWidget {
