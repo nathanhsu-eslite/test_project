@@ -1,53 +1,40 @@
-import 'package:cats_repository/cats_repository.dart';
+import 'dart:io';
+
+import 'package:data/data.dart';
+import 'package:data/objectbox.g.dart';
 import 'package:domain/src/domains/favorite/useCase/add_favorite.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../mock_data.dart';
 
-class MockAddFavoriteRepoInterface extends Mock
-    implements AddFavoriteRepoInterface {}
-
 void main() {
+  late final Box<Favorite> box;
+  late final FavoriteCatDB favoriteCat;
+  late final Store store;
+  late Directory testDir;
+
+  setUpAll(() async {
+    testDir = await Directory.systemTemp.createTemp('objectbox_test_');
+    store = await openStore(directory: testDir.path);
+    box = store.box<Favorite>();
+    favoriteCat = FavoriteCatDB(store: store);
+  });
+  tearDown(() {
+    box.removeAll();
+  });
   group('AddFavoriteUC', () {
-    late AddFavoriteRepoInterface mockAddFavoriteRepoInterface;
     late AddFavoriteUC addFavoriteUC;
 
     setUp(() {
-      mockAddFavoriteRepoInterface = MockAddFavoriteRepoInterface();
-      addFavoriteUC = AddFavoriteUC(
-        addFavoriteRepo: mockAddFavoriteRepoInterface,
-      );
+      addFavoriteUC = AddFavoriteUC.create(db: favoriteCat);
     });
 
     test('favorite added should successfully', () async {
-      // arrange
-      when(
-        () => mockAddFavoriteRepoInterface.handle(Data.mockFavorite),
-      ).thenAnswer((_) async => Future.value());
-      // act
-      final result = await addFavoriteUC.call(Data.mockFavorite);
-      expect(() => result, isA<void>());
-      verify(
-        () => mockAddFavoriteRepoInterface.handle(Data.mockFavorite),
-      ).called(1);
+      addFavoriteUC.call(Data.mockFavorite);
+      final result = await favoriteCat.query();
+      expect(result, isA<List<Favorite>>());
+      expect(result, isNotEmpty);
+      expect(result[0].imageId, '1');
     });
-
-    test(
-      'should throw an exception when underlying handle throws an exception',
-      () async {
-        // arrange
-        when(
-          () => mockAddFavoriteRepoInterface.handle(Data.mockFavorite),
-        ).thenThrow(Exception('repo error'));
-        // act
-        final call = addFavoriteUC.call(Data.mockFavorite);
-        // assert
-        expect(() => call, throwsA(isA<Exception>()));
-        verify(
-          () => mockAddFavoriteRepoInterface.handle(Data.mockFavorite),
-        ).called(1);
-      },
-    );
   });
 }

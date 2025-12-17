@@ -1,14 +1,4 @@
-import 'dart:io';
-
 import 'package:data/data.dart';
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-
-class MockPathProviderPlatform extends PathProviderPlatform {
-  @override
-  Future<String?> getApplicationDocumentsPath() async {
-    return Directory.systemTemp.path;
-  }
-}
 
 class Data {
   static Favorite mockFavorite = Favorite(
