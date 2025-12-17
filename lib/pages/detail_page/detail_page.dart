@@ -6,8 +6,9 @@ import 'package:test_3_35_7/features/favorite/blocs/delete_favorite/delete_favor
 import 'package:test_3_35_7/features/favorite/blocs/find_favorite/find_favorite_bloc.dart';
 import 'package:test_3_35_7/features/get_cat_detail/bloc/get_cat_bloc.dart';
 import 'package:test_3_35_7/features/get_cat_images/models/my_image.dart';
-import 'package:test_3_35_7/page/error_page.dart';
+
 import 'package:test_3_35_7/pages/detail_page/widget/detail_widget.dart';
+import 'package:test_3_35_7/pages/error_page/error_page.dart';
 import 'package:test_3_35_7/service/service_locator.dart';
 
 class CatDetailPage extends StatelessWidget {
@@ -23,9 +24,8 @@ class CatDetailPage extends StatelessWidget {
                 ..add(GetCatQueried(image.id)),
         ),
         BlocProvider<AddFavoriteBloc>(
-          create: (context) => AddFavoriteBloc(
-            addFavoriteUseCase: getIt<AddFavoriteUseCase>(),
-          ),
+          create: (context) =>
+              AddFavoriteBloc(addFavoriteUseCase: getIt<AddFavoriteUseCase>()),
         ),
         BlocProvider<DeleteFavoriteBloc>(
           create: (context) => DeleteFavoriteBloc(
@@ -33,9 +33,8 @@ class CatDetailPage extends StatelessWidget {
           ),
         ),
         BlocProvider<FindFavoriteBloc>(
-          create: (context) => FindFavoriteBloc(
-            findFavoriteUC: getIt<FindFavoriteUseCase>(),
-          ),
+          create: (context) =>
+              FindFavoriteBloc(findFavoriteUC: getIt<FindFavoriteUseCase>()),
         ),
       ],
       child: CatDetailView(image: image),
@@ -58,15 +57,15 @@ class CatDetailView extends StatelessWidget {
               );
               final catState = context.read<GetCatBloc>().state;
               if (catState is CatGetDetailSuccessState) {
-                context
-                    .read<FindFavoriteBloc>()
-                    .add(FindFavoriteByName(catState.detail.breedName));
+                context.read<FindFavoriteBloc>().add(
+                  FindFavoriteByName(catState.detail.breedName),
+                );
               }
             } else if (state is AddFavoriteFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                    content:
-                        Text('Failed to add to favorites: ${state.message}')),
+                  content: Text('Failed to add to favorites: ${state.message}'),
+                ),
               );
             }
           },
@@ -79,15 +78,17 @@ class CatDetailView extends StatelessWidget {
               );
               final catState = context.read<GetCatBloc>().state;
               if (catState is CatGetDetailSuccessState) {
-                context
-                    .read<FindFavoriteBloc>()
-                    .add(FindFavoriteByName(catState.detail.breedName));
+                context.read<FindFavoriteBloc>().add(
+                  FindFavoriteByName(catState.detail.breedName),
+                );
               }
             } else if (state is DeleteFavoriteFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                    content: Text(
-                        'Failed to remove from favorites: ${state.message}')),
+                  content: Text(
+                    'Failed to remove from favorites: ${state.message}',
+                  ),
+                ),
               );
             }
           },
@@ -103,20 +104,22 @@ class CatDetailView extends StatelessWidget {
               return ErrorPage(error: state.error);
             case CatGetDetailSuccessState():
               final cat = state.detail;
-              context
-                  .read<FindFavoriteBloc>()
-                  .add(FindFavoriteByName(cat.breedName));
+              context.read<FindFavoriteBloc>().add(
+                FindFavoriteByName(cat.breedName),
+              );
               return Scaffold(
                 appBar: AppBar(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.inversePrimary,
+                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                   title: Text(cat.breedName),
                   centerTitle: true,
                   actions: [
                     BlocBuilder<FindFavoriteBloc, FindFavoriteState>(
                       builder: (context, findState) {
-                        final isFavorite = findState.status == FindFavoriteStatus.success &&
-                            findState.favorites.any((fav) => fav.imageId == image.id);
+                        final isFavorite =
+                            findState.status == FindFavoriteStatus.success &&
+                            findState.favorites.any(
+                              (fav) => fav.imageId == image.id,
+                            );
                         return IconButton(
                           icon: Icon(
                             isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -124,14 +127,16 @@ class CatDetailView extends StatelessWidget {
                           ),
                           onPressed: () {
                             if (isFavorite) {
-                              final favorite = findState.favorites.firstWhere((fav) => fav.imageId == image.id);
-                              context
-                                  .read<DeleteFavoriteBloc>()
-                                  .add(DeleteFavoriteById(favorite.id));
+                              final favorite = findState.favorites.firstWhere(
+                                (fav) => fav.imageId == image.id,
+                              );
+                              context.read<DeleteFavoriteBloc>().add(
+                                DeleteFavoriteById(favorite.id),
+                              );
                             } else {
-                              context
-                                  .read<AddFavoriteBloc>()
-                                  .add(AddFavorite(cat, image));
+                              context.read<AddFavoriteBloc>().add(
+                                AddFavorite(cat, image),
+                              );
                             }
                           },
                         );

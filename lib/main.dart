@@ -1,8 +1,6 @@
 import 'package:data/objectbox.g.dart';
 import 'package:flutter/material.dart';
-
 import 'package:test_3_35_7/pages/home_page/home_page.dart';
-
 import 'package:test_3_35_7/service/service_locator.dart';
 
 void main() async {
@@ -22,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'test'),
+      home: MyHomePage(title: 'Cats'),
     );
   }
 }

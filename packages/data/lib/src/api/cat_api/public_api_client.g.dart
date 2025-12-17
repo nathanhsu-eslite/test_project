@@ -31,8 +31,7 @@ class _PublicApiClient implements PublicApiClient {
       r'limit': limit,
       r'has_breeds': hasBreeds,
     };
-    final _headers = <String, dynamic>{r'x-api-key': ''};
-    _headers.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<List<ImageModel>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
@@ -61,8 +60,7 @@ class _PublicApiClient implements PublicApiClient {
   Future<ImageModel> fetchCatData(String id) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'x-api-key': ''};
-    _headers.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<ImageModel>(
       Options(method: 'GET', headers: _headers, extra: _extra)
