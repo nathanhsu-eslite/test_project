@@ -14,51 +14,81 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_sync_flutter_libs/objectbox_sync_flutter_libs.dart';
 
+import 'src/db/auth/schema/user.dart';
 import 'src/db/favorite/schema/favorite.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
 final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
-    id: const obx_int.IdUid(1, 2365810819321998575),
+    id: const obx_int.IdUid(1, 8734467388528399947),
     name: 'Favorite',
-    lastPropertyId: const obx_int.IdUid(6, 6162810112563861626),
+    lastPropertyId: const obx_int.IdUid(6, 6799268361074394814),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(1, 7635873026558841224),
+        id: const obx_int.IdUid(1, 3525456906048297493),
         name: 'id',
         type: 6,
         flags: 1,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(2, 3030372273365204535),
+        id: const obx_int.IdUid(2, 5811291820958976724),
         name: 'imageId',
         type: 9,
         flags: 2080,
-        indexId: const obx_int.IdUid(1, 4657482334892715789),
+        indexId: const obx_int.IdUid(1, 2620974126960929341),
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(3, 7510230980041264374),
+        id: const obx_int.IdUid(3, 6193768415902485906),
+        name: 'url',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 3050079511951423185),
         name: 'urlHeight',
         type: 6,
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(4, 1736526418466199975),
+        id: const obx_int.IdUid(5, 9199129268017529713),
         name: 'urlWidth',
         type: 6,
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(5, 8754304991187197504),
+        id: const obx_int.IdUid(6, 6799268361074394814),
         name: 'breedName',
         type: 9,
         flags: 0,
       ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(2, 3052958048876495611),
+    name: 'UserEntity',
+    lastPropertyId: const obx_int.IdUid(3, 4758396924676312363),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(6, 6162810112563861626),
-        name: 'url',
+        id: const obx_int.IdUid(1, 7863315170880506095),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 3243191124924932404),
+        name: 'username',
+        type: 9,
+        flags: 2080,
+        indexId: const obx_int.IdUid(2, 1261873209114750810),
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 4758396924676312363),
+        name: 'encryptedPassword',
         type: 9,
         flags: 0,
       ),
@@ -106,8 +136,8 @@ Future<obx.Store> openStore({
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(1, 2365810819321998575),
-    lastIndexId: const obx_int.IdUid(1, 4657482334892715789),
+    lastEntityId: const obx_int.IdUid(2, 3052958048876495611),
+    lastIndexId: const obx_int.IdUid(2, 1261873209114750810),
     lastRelationId: const obx_int.IdUid(0, 0),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
@@ -130,15 +160,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (Favorite object, fb.Builder fbb) {
         final imageIdOffset = fbb.writeString(object.imageId);
-        final breedNameOffset = fbb.writeString(object.breedName);
         final urlOffset = fbb.writeString(object.url);
+        final breedNameOffset = fbb.writeString(object.breedName);
         fbb.startTable(7);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, imageIdOffset);
-        fbb.addInt64(2, object.urlHeight);
-        fbb.addInt64(3, object.urlWidth);
-        fbb.addOffset(4, breedNameOffset);
-        fbb.addOffset(5, urlOffset);
+        fbb.addOffset(2, urlOffset);
+        fbb.addInt64(3, object.urlHeight);
+        fbb.addInt64(4, object.urlWidth);
+        fbb.addOffset(5, breedNameOffset);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -150,28 +180,65 @@ obx_int.ModelDefinition getObjectBoxModel() {
         ).vTableGet(buffer, rootOffset, 6, '');
         final urlParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 14, '');
+        ).vTableGet(buffer, rootOffset, 8, '');
         final urlHeightParam = const fb.Int64Reader().vTableGet(
-          buffer,
-          rootOffset,
-          8,
-          0,
-        );
-        final urlWidthParam = const fb.Int64Reader().vTableGet(
           buffer,
           rootOffset,
           10,
           0,
         );
+        final urlWidthParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          12,
+          0,
+        );
         final breedNameParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 12, '');
+        ).vTableGet(buffer, rootOffset, 14, '');
         final object = Favorite(
           imageId: imageIdParam,
           url: urlParam,
           urlHeight: urlHeightParam,
           urlWidth: urlWidthParam,
           breedName: breedNameParam,
+        )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+        return object;
+      },
+    ),
+    UserEntity: obx_int.EntityDefinition<UserEntity>(
+      model: _entities[1],
+      toOneRelations: (UserEntity object) => [],
+      toManyRelations: (UserEntity object) => {},
+      getId: (UserEntity object) => object.id,
+      setId: (UserEntity object, int id) {
+        object.id = id;
+      },
+      objectToFB: (UserEntity object, fb.Builder fbb) {
+        final usernameOffset = fbb.writeString(object.username);
+        final encryptedPasswordOffset = fbb.writeString(
+          object.encryptedPassword,
+        );
+        fbb.startTable(4);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, usernameOffset);
+        fbb.addOffset(2, encryptedPasswordOffset);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final encryptedPasswordParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final usernameParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final object = UserEntity(
+          encryptedPassword: encryptedPasswordParam,
+          username: usernameParam,
         )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
         return object;
@@ -194,23 +261,41 @@ class Favorite_ {
     _entities[0].properties[1],
   );
 
+  /// See [Favorite.url].
+  static final url = obx.QueryStringProperty<Favorite>(
+    _entities[0].properties[2],
+  );
+
   /// See [Favorite.urlHeight].
   static final urlHeight = obx.QueryIntegerProperty<Favorite>(
-    _entities[0].properties[2],
+    _entities[0].properties[3],
   );
 
   /// See [Favorite.urlWidth].
   static final urlWidth = obx.QueryIntegerProperty<Favorite>(
-    _entities[0].properties[3],
+    _entities[0].properties[4],
   );
 
   /// See [Favorite.breedName].
   static final breedName = obx.QueryStringProperty<Favorite>(
-    _entities[0].properties[4],
+    _entities[0].properties[5],
+  );
+}
+
+/// [UserEntity] entity fields to define ObjectBox queries.
+class UserEntity_ {
+  /// See [UserEntity.id].
+  static final id = obx.QueryIntegerProperty<UserEntity>(
+    _entities[1].properties[0],
   );
 
-  /// See [Favorite.url].
-  static final url = obx.QueryStringProperty<Favorite>(
-    _entities[0].properties[5],
+  /// See [UserEntity.username].
+  static final username = obx.QueryStringProperty<UserEntity>(
+    _entities[1].properties[1],
+  );
+
+  /// See [UserEntity.encryptedPassword].
+  static final encryptedPassword = obx.QueryStringProperty<UserEntity>(
+    _entities[1].properties[2],
   );
 }

@@ -4,49 +4,75 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:2365810819321998575",
-      "lastPropertyId": "6:6162810112563861626",
+      "id": "1:8734467388528399947",
+      "lastPropertyId": "6:6799268361074394814",
       "name": "Favorite",
       "properties": [
         {
-          "id": "1:7635873026558841224",
+          "id": "1:3525456906048297493",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:3030372273365204535",
+          "id": "2:5811291820958976724",
           "name": "imageId",
-          "indexId": "1:4657482334892715789",
+          "indexId": "1:2620974126960929341",
           "type": 9,
           "flags": 2080
         },
         {
-          "id": "3:7510230980041264374",
+          "id": "3:6193768415902485906",
+          "name": "url",
+          "type": 9
+        },
+        {
+          "id": "4:3050079511951423185",
           "name": "urlHeight",
           "type": 6
         },
         {
-          "id": "4:1736526418466199975",
+          "id": "5:9199129268017529713",
           "name": "urlWidth",
           "type": 6
         },
         {
-          "id": "5:8754304991187197504",
+          "id": "6:6799268361074394814",
           "name": "breedName",
           "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:3052958048876495611",
+      "lastPropertyId": "3:4758396924676312363",
+      "name": "UserEntity",
+      "properties": [
+        {
+          "id": "1:7863315170880506095",
+          "name": "id",
+          "type": 6,
+          "flags": 1
         },
         {
-          "id": "6:6162810112563861626",
-          "name": "url",
+          "id": "2:3243191124924932404",
+          "name": "username",
+          "indexId": "2:1261873209114750810",
+          "type": 9,
+          "flags": 2080
+        },
+        {
+          "id": "3:4758396924676312363",
+          "name": "encryptedPassword",
           "type": 9
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "1:2365810819321998575",
-  "lastIndexId": "1:4657482334892715789",
+  "lastEntityId": "2:3052958048876495611",
+  "lastIndexId": "2:1261873209114750810",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

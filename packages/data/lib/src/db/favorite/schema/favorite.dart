@@ -1,6 +1,6 @@
 import 'package:objectbox/objectbox.dart';
 
-@Entity()
+@Entity(uid: 8734467388528399947)
 class Favorite {
   @Id()
   int id = 0;
