@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:cats_repository/cats_repository.dart'; // Correct import for UserPreference
-import 'package:test_3_35_7/pages/match_result_page/match_result_page.dart';
+import 'package:cats_repository/cats_repository.dart';
+import 'package:test_3_35_7/routes/preference_form_route.dart';
 
 class PreferenceFormPage extends StatefulWidget {
   const PreferenceFormPage({super.key});
@@ -104,14 +104,7 @@ class _PreferenceFormPageState extends State<PreferenceFormPage> {
                     desiredDogFriendly: _desiredDogFriendly.toInt(),
                     desiredSocialNeeds: _desiredSocialNeeds.toInt(),
                   );
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          MatchResultPage(userPreference: userPreference),
-                    ),
-                  );
+                  MatchRoute(userPreference).push(context);
                 },
                 child: const Text('Find My Match'),
               ),

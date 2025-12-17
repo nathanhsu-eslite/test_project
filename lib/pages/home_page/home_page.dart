@@ -5,8 +5,8 @@ import 'package:test_3_35_7/features/get_cat_images/bloc/get_cat_images_bloc.dar
 
 import 'package:test_3_35_7/pages/error_page/error_page.dart';
 import 'package:test_3_35_7/pages/home_page/widget/images_list.dart';
-import 'package:test_3_35_7/pages/preference_form_page/preference_form_page.dart';
 import 'package:test_3_35_7/routes/favorite_route.dart';
+import 'package:test_3_35_7/routes/preference_form_route.dart';
 
 import 'package:test_3_35_7/service/service_locator.dart';
 
@@ -30,10 +30,7 @@ class MyHomePage extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PreferenceFormPage()),
-                );
+                PreferenceRoute().push(context);
               },
               icon: Icon(Icons.filter_list),
             ),
