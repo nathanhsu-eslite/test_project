@@ -6,3 +6,7 @@ abstract interface class LoginUseCase {
     required String password,
   });
 }
+
+abstract interface class RegisterUseCase {
+  Future<void> call({required String userName, required String password});
+}
