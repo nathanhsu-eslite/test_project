@@ -3,7 +3,7 @@ import 'package:data/data.dart';
 import 'package:domain/src/domains/auth/domain.dart';
 
 class LoginUC implements LoginUseCase {
-  final LoginRepo repo;
+  final LoginInterface repo;
 
   LoginUC({required this.repo});
   factory LoginUC.create({required AuthDBInterface db}) {
