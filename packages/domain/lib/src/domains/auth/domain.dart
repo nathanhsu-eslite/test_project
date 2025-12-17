@@ -10,3 +10,7 @@ abstract interface class LoginUseCase {
 abstract interface class RegisterUseCase {
   Future<void> call({required String userName, required String password});
 }
+
+abstract interface class DeleteUserUseCase {
+  Future<void> call({required int id});
+}
