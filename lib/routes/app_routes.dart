@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:get_it/get_it.dart';
-import 'package:test_3_35_7/routes/go_router_refresh_stream.dart';
 
 import 'package:test_3_35_7/routes/detail_route.dart' as detail;
 import 'package:test_3_35_7/routes/favorite_route.dart' as favorite;
@@ -9,9 +7,8 @@ import 'package:test_3_35_7/routes/home_route.dart' as home;
 import 'package:test_3_35_7/routes/preference_form_route.dart' as preference;
 import 'package:test_3_35_7/routes/login_route.dart' as login;
 import 'package:test_3_35_7/routes/register_route.dart' as register;
-import 'package:test_3_35_7/service/auth_service.dart';
 
-final getIt = GetIt.instance;
+final authNotifier = ValueNotifier<bool>(false);
 
 final GoRouter router = GoRouter(
   routes: <RouteBase>[
@@ -23,8 +20,7 @@ final GoRouter router = GoRouter(
     ...register.$appRoutes,
   ],
   redirect: (BuildContext context, GoRouterState state) {
-    final bool loggedIn = getIt<AuthService>().isLoggedIn;
-
+    final loggedIn = authNotifier.value;
     final String currentPath = state.matchedLocation;
 
     // Redirect from '/' to '/home'
@@ -50,5 +46,5 @@ final GoRouter router = GoRouter(
 
     return null;
   },
-  refreshListenable: GoRouterRefreshStream(getIt<AuthService>().authStream),
+  refreshListenable: authNotifier,
 );
