@@ -5,7 +5,9 @@ import 'package:test_3_35_7/pages/detail_page/detail_page.dart';
 
 part 'detail_route.g.dart';
 
-@TypedGoRoute<DetailRoute>(path: '/detail')
+const detailPath = '/detail';
+
+@TypedGoRoute<DetailRoute>(path: detailPath)
 class DetailRoute extends GoRouteData with $DetailRoute {
   final MyImage $extra;
 

@@ -4,7 +4,9 @@ import 'package:test_3_35_7/pages/home_page/home_page.dart';
 
 part 'home_route.g.dart';
 
-@TypedGoRoute<HomeRoute>(path: '/')
+const homePath = '/home';
+
+@TypedGoRoute<HomeRoute>(path: homePath)
 class HomeRoute extends GoRouteData with $HomeRoute {
   @override
   Widget build(context, state) {

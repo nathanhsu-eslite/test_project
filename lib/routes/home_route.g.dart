@@ -9,13 +9,13 @@ part of 'home_route.dart';
 List<RouteBase> get $appRoutes => [$homeRoute];
 
 RouteBase get $homeRoute =>
-    GoRouteData.$route(path: '/', factory: $HomeRoute._fromState);
+    GoRouteData.$route(path: '/home', factory: $HomeRoute._fromState);
 
 mixin $HomeRoute on GoRouteData {
   static HomeRoute _fromState(GoRouterState state) => HomeRoute();
 
   @override
-  String get location => GoRouteData.$location('/');
+  String get location => GoRouteData.$location('/home');
 
   @override
   void go(BuildContext context) => context.go(location);

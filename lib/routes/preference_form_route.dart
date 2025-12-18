@@ -17,7 +17,9 @@ class MatchRoute extends GoRouteData with $MatchRoute {
   }
 }
 
-@TypedGoRoute<PreferenceRoute>(path: '/preference')
+const preferencePath = '/preference';
+
+@TypedGoRoute<PreferenceRoute>(path: preferencePath)
 class PreferenceRoute extends GoRouteData with $PreferenceRoute {
   @override
   Widget build(context, state) {
