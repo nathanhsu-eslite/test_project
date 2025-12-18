@@ -6,6 +6,8 @@ class RegisterRepo implements RegisterInterface {
 
   RegisterRepo({required this.db});
   @override
-  Future<void> handle({required String userName, required String password}) =>
-      db.register(userName, password);
+  Future<UserEntity> handle({
+    required String userName,
+    required String password,
+  }) => db.register(userName, password);
 }

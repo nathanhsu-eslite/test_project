@@ -1,3 +1,8 @@
+import 'package:data/data.dart';
+
 abstract interface class RegisterInterface {
-  Future<void> handle({required String userName, required String password});
+  Future<UserEntity> handle({
+    required String userName,
+    required String password,
+  });
 }

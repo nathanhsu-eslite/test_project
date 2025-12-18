@@ -22,13 +22,20 @@ void main() {
         const userName = 'test';
         const password = 'password';
 
-        when(
-          () => authDB.register(userName, password),
-        ).thenAnswer((_) async {});
+        when(() => authDB.register(userName, password)).thenAnswer(
+          (_) async => UserEntity(
+            encryptedPassword: password.encrypt(),
+            username: userName,
+          ),
+        );
 
-        await registerRepo.handle(userName: userName, password: password);
+        final result = await registerRepo.handle(
+          userName: userName,
+          password: password,
+        );
 
-        verify(() => authDB.register(userName, password)).called(1);
+        expect(result.username, userName);
+        expect(result.encryptedPassword, password.encrypt());
       },
     );
 
