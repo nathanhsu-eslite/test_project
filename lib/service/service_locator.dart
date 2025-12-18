@@ -27,6 +27,9 @@ void setupLocator({required Store store}) {
   getIt.registerLazySingleton<LoginUseCase>(
     () => LoginUC.create(db: getIt<AuthDBInterface>()),
   );
+  getIt.registerLazySingleton<RegisterUseCase>(
+    () => RegisterUC.create(db: getIt<AuthDBInterface>()),
+  );
 }
 
 void _registerFavoriteService() {

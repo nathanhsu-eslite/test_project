@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_3_35_7/features/auth/blocs/login_bloc/login_bloc.dart';
-import 'package:test_3_35_7/routes/register_route.dart';
+import 'package:test_3_35_7/features/auth/blocs/register_bloc/register_bloc.dart';
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+class RegisterForm extends StatefulWidget {
+  const RegisterForm({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  State<RegisterForm> createState() => _RegisterFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _RegisterFormState extends State<RegisterForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,22 +29,21 @@ class _LoginFormState extends State<LoginForm> {
             decoration: const InputDecoration(labelText: 'Password'),
             obscureText: true,
           ),
+          TextField(
+            controller: _confirmPasswordController,
+            decoration: const InputDecoration(labelText: 'Confirm Password'),
+            obscureText: true,
+          ),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              context.read<LoginBloc>().add(
-                LoginSubmitted(
-                  username: _usernameController.text,
-                  password: _passwordController.text,
-                ),
-              );
-            },
-            child: const Text('Login'),
-          ),
-          const SizedBox(height: 16),
-          TextButton(
-            onPressed: () {
-              RegisterRoute().push(context);
+              context.read<RegisterBloc>().add(
+                    RegisterSubmitted(
+                      username: _usernameController.text,
+                      password: _passwordController.text,
+                      confirmPassword: _confirmPasswordController.text,
+                    ),
+                  );
             },
             child: const Text('Register'),
           ),
