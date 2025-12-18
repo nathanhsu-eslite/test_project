@@ -5,16 +5,19 @@ import 'package:test_3_35_7/features/get_cat_images/bloc/get_cat_images_bloc.dar
 
 import 'package:test_3_35_7/pages/error_page/error_page.dart';
 import 'package:test_3_35_7/pages/home_page/widget/images_list.dart';
+import 'package:test_3_35_7/routes/app_routes.dart'; // Import authNotifier
 import 'package:test_3_35_7/routes/favorite_route.dart';
+import 'package:test_3_35_7/routes/home_route.dart';
 import 'package:test_3_35_7/routes/login_route.dart';
-import 'package:test_3_35_7/routes/preference_form_route.dart';
-import 'package:test_3_35_7/service/auth_service.dart';
 
+import 'package:data/data.dart';
 import 'package:test_3_35_7/service/service_locator.dart';
-import 'package:data/data.dart'; // Import UserEntity
+
+import '../../routes/preference_form_route.dart'; // Import UserEntity
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+  final UserEntity? user;
+  const MyHomePage({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -37,47 +40,35 @@ class MyHomePage extends StatelessWidget {
               },
               icon: const Icon(Icons.filter_list),
             ),
-            StreamBuilder<UserEntity?>(
-              stream: getIt<AuthService>().authStream,
-              initialData: getIt<AuthService>().user,
-              builder: (context, snapshot) {
-                final user = snapshot.data;
-                if (user != null) {
-                  return IconButton(
+
+            user != null
+                ? IconButton(
                     icon: const Icon(Icons.logout),
-                    onPressed: () {
-                      getIt<AuthService>().logout();
+                    onPressed: () async {
+                      authNotifier.value = false;
+                      HomeRoute(null).go(context); // Navigate to login page
                     },
-                  );
-                } else {
-                  return IconButton(
+                  )
+                : IconButton(
                     icon: const Icon(Icons.login),
                     onPressed: () {
                       LoginRoute().push(context);
                     },
-                  );
-                }
-              },
-            ),
+                  ),
           ],
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: StreamBuilder<UserEntity?>(
-            stream: getIt<AuthService>().authStream,
-            initialData: getIt<AuthService>().user,
-            builder: (context, snapshot) {
-              final user = snapshot.data;
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('cats'),
-                  const SizedBox(width: 8),
-                  Text(
-                    user != null ? '(Logged in: ${user.username})' : '(Logged out)',
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                ],
-              );
-            },
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('cats'),
+              const SizedBox(width: 8),
+              Text(
+                user != null
+                    ? '(Logged in: ${user!.username})'
+                    : '(Guest mode)',
+                style: const TextStyle(fontSize: 12),
+              ),
+            ],
           ),
         ),
         body: const HomeView(),
