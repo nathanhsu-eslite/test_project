@@ -6,7 +6,9 @@ import 'package:test_3_35_7/features/get_cat_images/bloc/get_cat_images_bloc.dar
 import 'package:test_3_35_7/pages/error_page/error_page.dart';
 import 'package:test_3_35_7/pages/home_page/widget/images_list.dart';
 import 'package:test_3_35_7/routes/favorite_route.dart';
+import 'package:test_3_35_7/routes/login_route.dart';
 import 'package:test_3_35_7/routes/preference_form_route.dart';
+import 'package:test_3_35_7/service/auth_service.dart';
 
 import 'package:test_3_35_7/service/service_locator.dart';
 
@@ -32,8 +34,22 @@ class MyHomePage extends StatelessWidget {
               onPressed: () {
                 PreferenceRoute().push(context);
               },
-              icon: Icon(Icons.filter_list),
+              icon: const Icon(Icons.filter_list),
             ),
+            if (getIt<AuthService>().isLoggedIn)
+              IconButton(
+                icon: const Icon(Icons.logout),
+                onPressed: () {
+                  getIt<AuthService>().logout();
+                },
+              )
+            else
+              IconButton(
+                icon: const Icon(Icons.login),
+                onPressed: () {
+                  LoginRoute().push(context);
+                },
+              ),
           ],
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: const Text('cats'),
