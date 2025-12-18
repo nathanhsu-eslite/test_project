@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:data/data.dart';
 import 'package:data/objectbox.g.dart';
 import 'package:domain/src/domains/auth/auth.dart';
-import 'package:domain/src/domains/auth/useCase/login.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
