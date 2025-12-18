@@ -1,3 +1,4 @@
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,8 +11,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterUseCase _registerUseCase;
 
   RegisterBloc({required RegisterUseCase registerUseCase})
-      : _registerUseCase = registerUseCase,
-        super(RegisterInitial()) {
+    : _registerUseCase = registerUseCase,
+      super(RegisterInitial()) {
     on<RegisterSubmitted>(_onSubmitted);
   }
 
@@ -19,22 +20,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegisterSubmitted event,
     Emitter<RegisterState> emit,
   ) async {
-    if (event.username.trim().isEmpty || event.password.trim().isEmpty || event.confirmPassword.trim().isEmpty) {
-      emit(
-        RegisterFailure(
-          error: InvalidRegisterInputAuthBlocException(),
-        ),
-      );
+    if (event.username.trim().isEmpty ||
+        event.password.trim().isEmpty ||
+        event.confirmPassword.trim().isEmpty) {
+      emit(RegisterFailure(error: InvalidRegisterInputAuthBlocException()));
 
       return;
     }
 
     if (event.password != event.confirmPassword) {
-      emit(
-        RegisterFailure(
-          error: PasswordMismatchAuthBlocException(),
-        ),
-      );
+      emit(RegisterFailure(error: PasswordMismatchAuthBlocException()));
 
       return;
     }
@@ -42,11 +37,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     emit(RegisterInProgress());
 
     try {
-      await _registerUseCase(
+      final user = await _registerUseCase.call(
         userName: event.username,
         password: event.password,
       );
-      emit(RegisterSuccess());
+      emit(RegisterSuccess(user: user));
     } catch (e) {
       emit(RegisterFailure(error: e));
     }

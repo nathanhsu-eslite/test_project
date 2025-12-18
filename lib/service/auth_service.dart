@@ -1,25 +1,27 @@
 import 'dart:async';
+import 'package:data/data.dart'; // Import UserEntity
 
 class AuthService {
   static final AuthService _instance = AuthService._internal();
   factory AuthService() => _instance;
   AuthService._internal();
 
-  final StreamController<bool> _authController = StreamController<bool>.broadcast();
+  final StreamController<UserEntity?> _authController = StreamController<UserEntity?>.broadcast();
 
-  bool _isLoggedIn = false;
+  UserEntity? _user;
 
-  Stream<bool> get authStream => _authController.stream;
-  bool get isLoggedIn => _isLoggedIn;
+  Stream<UserEntity?> get authStream => _authController.stream;
+  bool get isLoggedIn => _user != null;
+  UserEntity? get user => _user;
 
-  void login() {
-    _isLoggedIn = true;
-    _authController.add(_isLoggedIn);
+  void login(UserEntity user) {
+    _user = user;
+    _authController.add(_user);
   }
 
   void logout() {
-    _isLoggedIn = false;
-    _authController.add(_isLoggedIn);
+    _user = null;
+    _authController.add(_user);
   }
 
   void dispose() {

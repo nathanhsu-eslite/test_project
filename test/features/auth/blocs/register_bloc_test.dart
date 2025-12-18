@@ -29,19 +29,30 @@ void main() {
     });
 
     group('RegisterSubmitted', () {
+      final user = UserEntity(
+        username: 'user',
+        encryptedPassword: 'password'.encrypt(),
+      );
       blocTest<RegisterBloc, RegisterState>(
         'emits [RegisterInProgress, RegisterSuccess] when registration succeeds',
+
         setUp: () {
           when(
             () => registerUseCase(userName: 'user', password: 'password'),
-          ).thenAnswer((_) async => {});
+          ).thenAnswer((_) async => user);
         },
         build: buildBloc,
         act: (bloc) => bloc.add(
           const RegisterSubmitted(
-              username: 'user', password: 'password', confirmPassword: 'password'),
+            username: 'user',
+            password: 'password',
+            confirmPassword: 'password',
+          ),
         ),
-        expect: () => <RegisterState>[RegisterInProgress(), RegisterSuccess()],
+        expect: () => <RegisterState>[
+          RegisterInProgress(),
+          RegisterSuccess(user: user),
+        ],
       );
 
       blocTest<RegisterBloc, RegisterState>(
@@ -54,7 +65,10 @@ void main() {
         build: buildBloc,
         act: (bloc) => bloc.add(
           const RegisterSubmitted(
-              username: 'user', password: 'password', confirmPassword: 'password'),
+            username: 'user',
+            password: 'password',
+            confirmPassword: 'password',
+          ),
         ),
         expect: () => [
           RegisterInProgress(),
@@ -71,7 +85,10 @@ void main() {
         build: buildBloc,
         act: (bloc) => bloc.add(
           const RegisterSubmitted(
-              username: '', password: 'password', confirmPassword: 'password'),
+            username: '',
+            password: 'password',
+            confirmPassword: 'password',
+          ),
         ),
         expect: () => [
           isA<RegisterFailure>().having(
@@ -87,7 +104,10 @@ void main() {
         build: buildBloc,
         act: (bloc) => bloc.add(
           const RegisterSubmitted(
-              username: 'user', password: '', confirmPassword: 'password'),
+            username: 'user',
+            password: '',
+            confirmPassword: 'password',
+          ),
         ),
         expect: () => [
           isA<RegisterFailure>().having(
@@ -103,7 +123,10 @@ void main() {
         build: buildBloc,
         act: (bloc) => bloc.add(
           const RegisterSubmitted(
-              username: 'user', password: 'password', confirmPassword: ''),
+            username: 'user',
+            password: 'password',
+            confirmPassword: '',
+          ),
         ),
         expect: () => [
           isA<RegisterFailure>().having(
@@ -119,7 +142,10 @@ void main() {
         build: buildBloc,
         act: (bloc) => bloc.add(
           const RegisterSubmitted(
-              username: 'user', password: 'password', confirmPassword: 'mismatch'),
+            username: 'user',
+            password: 'password',
+            confirmPassword: 'mismatch',
+          ),
         ),
         expect: () => [
           isA<RegisterFailure>().having(
