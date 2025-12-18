@@ -12,6 +12,8 @@ class RegisterUC implements RegisterUseCase {
   }
 
   @override
-  Future<void> call({required String userName, required String password}) =>
-      repo.handle(userName: userName, password: password);
+  Future<UserEntity> call({
+    required String userName,
+    required String password,
+  }) => repo.handle(userName: userName, password: password);
 }
