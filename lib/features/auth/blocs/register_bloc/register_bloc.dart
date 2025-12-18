@@ -19,10 +19,20 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegisterSubmitted event,
     Emitter<RegisterState> emit,
   ) async {
-    if (event.username.trim().isEmpty || event.password.trim().isEmpty) {
+    if (event.username.trim().isEmpty || event.password.trim().isEmpty || event.confirmPassword.trim().isEmpty) {
       emit(
         RegisterFailure(
           error: InvalidRegisterInputAuthBlocException(),
+        ),
+      );
+
+      return;
+    }
+
+    if (event.password != event.confirmPassword) {
+      emit(
+        RegisterFailure(
+          error: PasswordMismatchAuthBlocException(),
         ),
       );
 
