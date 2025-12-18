@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_3_35_7/features/auth/blocs/register_bloc/register_bloc.dart';
 import 'package:test_3_35_7/pages/register_page/widget/register_form.dart';
+import 'package:test_3_35_7/routes/app_routes.dart';
 import 'package:test_3_35_7/routes/home_route.dart';
-import 'package:test_3_35_7/service/auth_service.dart';
 import 'package:test_3_35_7/service/service_locator.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -27,8 +27,8 @@ class RegisterPage extends StatelessWidget {
                 ),
               );
             } else if (state is RegisterSuccess) {
-              HomeRoute().go(context);
-              getIt<AuthService>().login(state.user);
+              authNotifier.value = true;
+              HomeRoute(state.user).go(context);
             }
           },
           child: const RegisterForm(),
