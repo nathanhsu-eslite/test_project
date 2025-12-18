@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:get_it/get_it.dart';
 import 'package:test_3_35_7/consts.dart';
-import 'package:test_3_35_7/service/auth_service.dart';
 
 final getIt = GetIt.instance;
 
@@ -14,16 +13,13 @@ void setupLocator({required Store store}) {
   getIt.registerLazySingleton(
     () => Dio(BaseOptions(headers: {'x-api-key': Consts.apiKey})),
   );
+  getIt.registerLazySingleton<AuthDBInterface>(
+    () => AuthDB(store: getIt<Store>()),
+  );
   _registerFavoriteService();
   getIt.registerLazySingleton(() => GetCatsImagesUC.dio(dio: getIt<Dio>()));
   getIt.registerLazySingleton(() => GetCatDetailUC.dio(dio: getIt<Dio>()));
   getIt.registerLazySingleton(() => GetMatchResultUC.dio(dio: getIt<Dio>()));
-
-  getIt.registerLazySingleton<AuthService>(() => AuthService());
-
-  getIt.registerLazySingleton<AuthDBInterface>(
-    () => AuthDB(store: getIt<Store>()),
-  );
   getIt.registerLazySingleton<LoginUseCase>(
     () => LoginUC.create(db: getIt<AuthDBInterface>()),
   );

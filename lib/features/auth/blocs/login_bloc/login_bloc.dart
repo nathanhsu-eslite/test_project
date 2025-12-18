@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:data/data.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_3_35_7/features/auth/exception/auth_bloc_exception.dart';
-import 'package:test_3_35_7/service/auth_service.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -11,7 +10,7 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUseCase _loginUseCase;
 
-  LoginBloc({required LoginUseCase loginUseCase, AuthService? authService})
+  LoginBloc({required LoginUseCase loginUseCase})
     : _loginUseCase = loginUseCase,
       super(LoginInitial()) {
     on<LoginSubmitted>(_onSubmitted);
