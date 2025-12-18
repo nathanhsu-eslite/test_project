@@ -44,14 +44,14 @@ void main() {
     test('login with non-existent user throws UserNotFindAuthException', () {
       expect(
         () async => await authDB.login('nonexistent', 'password'),
-        throwsA(UserNotFindAuthException),
+        throwsA(isA<UserNotFindAuthException>()),
       );
     });
     test('register with existing username throws exception', () async {
       await authDB.register('testUser', 'password');
       expect(
         () async => await authDB.register('testUser', 'password'),
-        throwsA(UsernameAlreadyExistsAuthException),
+        throwsA(isA<UsernameAlreadyExistsAuthException>()),
       );
     });
 

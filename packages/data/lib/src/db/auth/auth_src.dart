@@ -5,7 +5,7 @@ import 'package:data/src/db/exception/auth_exception.dart';
 
 abstract interface class AuthDBInterface {
   Future<UserEntity?> login(String username, String password);
-  Future<void> register(String username, String password);
+  Future<UserEntity> register(String username, String password);
   Future<void> deleteUser(int id);
 }
 
@@ -22,7 +22,7 @@ class AuthDB implements AuthDBInterface {
           .build();
       UserEntity? userEntity = query.findUnique();
       query.close();
-      if (userEntity == null) throw UserNotFindAuthException;
+      if (userEntity == null) throw UserNotFindAuthException();
       if (password.encrypt() == userEntity.encryptedPassword) return userEntity;
 
       return null;
@@ -34,15 +34,20 @@ class AuthDB implements AuthDBInterface {
   }
 
   @override
-  Future<void> register(String username, String password) async {
+  Future<UserEntity> register(String username, String password) async {
     try {
-      final Query<UserEntity> query =
-          _box.query(UserEntity_.username.equals(username)).build();
+      final Query<UserEntity> query = _box
+          .query(UserEntity_.username.equals(username))
+          .build();
       UserEntity? userEntity = query.findUnique();
       query.close();
-      if (userEntity != null) throw UsernameAlreadyExistsAuthException;
+      if (userEntity != null) throw UsernameAlreadyExistsAuthException();
       _box.put(
         UserEntity(username: username, encryptedPassword: password.encrypt()),
+      );
+      return UserEntity(
+        username: username,
+        encryptedPassword: password.encrypt(),
       );
     } catch (e) {
       rethrow;
