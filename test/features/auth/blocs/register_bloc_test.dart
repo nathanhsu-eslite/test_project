@@ -38,7 +38,8 @@ void main() {
         },
         build: buildBloc,
         act: (bloc) => bloc.add(
-          const RegisterSubmitted(username: 'user', password: 'password'),
+          const RegisterSubmitted(
+              username: 'user', password: 'password', confirmPassword: 'password'),
         ),
         expect: () => <RegisterState>[RegisterInProgress(), RegisterSuccess()],
       );
@@ -52,7 +53,8 @@ void main() {
         },
         build: buildBloc,
         act: (bloc) => bloc.add(
-          const RegisterSubmitted(username: 'user', password: 'password'),
+          const RegisterSubmitted(
+              username: 'user', password: 'password', confirmPassword: 'password'),
         ),
         expect: () => [
           RegisterInProgress(),
@@ -68,7 +70,8 @@ void main() {
         'emits [RegisterFailure] when username is empty',
         build: buildBloc,
         act: (bloc) => bloc.add(
-          const RegisterSubmitted(username: '', password: 'password'),
+          const RegisterSubmitted(
+              username: '', password: 'password', confirmPassword: 'password'),
         ),
         expect: () => [
           isA<RegisterFailure>().having(
@@ -83,13 +86,46 @@ void main() {
         'emits [RegisterFailure] when password is empty',
         build: buildBloc,
         act: (bloc) => bloc.add(
-          const RegisterSubmitted(username: 'user', password: ''),
+          const RegisterSubmitted(
+              username: 'user', password: '', confirmPassword: 'password'),
         ),
         expect: () => [
           isA<RegisterFailure>().having(
             (p0) => p0.error,
             'error',
             isA<InvalidRegisterInputAuthBlocException>(),
+          ),
+        ],
+      );
+
+      blocTest<RegisterBloc, RegisterState>(
+        'emits [RegisterFailure] when confirmPassword is empty',
+        build: buildBloc,
+        act: (bloc) => bloc.add(
+          const RegisterSubmitted(
+              username: 'user', password: 'password', confirmPassword: ''),
+        ),
+        expect: () => [
+          isA<RegisterFailure>().having(
+            (p0) => p0.error,
+            'error',
+            isA<InvalidRegisterInputAuthBlocException>(),
+          ),
+        ],
+      );
+
+      blocTest<RegisterBloc, RegisterState>(
+        'emits [RegisterFailure] when password and confirmPassword do not match',
+        build: buildBloc,
+        act: (bloc) => bloc.add(
+          const RegisterSubmitted(
+              username: 'user', password: 'password', confirmPassword: 'mismatch'),
+        ),
+        expect: () => [
+          isA<RegisterFailure>().having(
+            (p0) => p0.error,
+            'error',
+            isA<PasswordMismatchAuthBlocException>(),
           ),
         ],
       );
