@@ -45,8 +45,10 @@ class MyHomePage extends StatelessWidget {
                 ? IconButton(
                     icon: const Icon(Icons.logout),
                     onPressed: () async {
+                      await getIt.popScope();
                       authNotifier.value = false;
-                      HomeRoute(null).go(context); // Navigate to login page
+
+                      if (context.mounted) HomeRoute(null).go(context);
                     },
                   )
                 : IconButton(

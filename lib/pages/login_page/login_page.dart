@@ -4,6 +4,7 @@ import 'package:test_3_35_7/features/auth/blocs/login_bloc/login_bloc.dart';
 import 'package:test_3_35_7/pages/login_page/widget/login_form.dart';
 import 'package:test_3_35_7/routes/app_routes.dart';
 import 'package:test_3_35_7/routes/home_route.dart';
+import 'package:test_3_35_7/service/service_locator.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -23,6 +24,7 @@ class LoginPage extends StatelessWidget {
             );
           } else if (state is LoginSuccess) {
             if (context.mounted) {
+              setupAuthScope();
               authNotifier.value = true;
               HomeRoute(state.user).go(context);
             }
