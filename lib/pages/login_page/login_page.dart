@@ -12,9 +12,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
+      appBar: AppBar(title: const Text('Login')),
       body: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginFailure) {
@@ -26,7 +24,7 @@ class LoginPage extends StatelessWidget {
             );
           } else if (state is LoginSuccess) {
             HomeRoute().go(context);
-            getIt<AuthService>().login();
+            getIt<AuthService>().login(state.user);
           }
         },
         child: const LoginForm(),

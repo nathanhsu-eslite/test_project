@@ -11,6 +11,7 @@ import 'package:test_3_35_7/routes/preference_form_route.dart';
 import 'package:test_3_35_7/service/auth_service.dart';
 
 import 'package:test_3_35_7/service/service_locator.dart';
+import 'package:data/data.dart'; // Import UserEntity
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
@@ -36,23 +37,48 @@ class MyHomePage extends StatelessWidget {
               },
               icon: const Icon(Icons.filter_list),
             ),
-            if (getIt<AuthService>().isLoggedIn)
-              IconButton(
-                icon: const Icon(Icons.logout),
-                onPressed: () {
-                  getIt<AuthService>().logout();
-                },
-              )
-            else
-              IconButton(
-                icon: const Icon(Icons.login),
-                onPressed: () {
-                  LoginRoute().push(context);
-                },
-              ),
+            StreamBuilder<UserEntity?>(
+              stream: getIt<AuthService>().authStream,
+              initialData: getIt<AuthService>().user,
+              builder: (context, snapshot) {
+                final user = snapshot.data;
+                if (user != null) {
+                  return IconButton(
+                    icon: const Icon(Icons.logout),
+                    onPressed: () {
+                      getIt<AuthService>().logout();
+                    },
+                  );
+                } else {
+                  return IconButton(
+                    icon: const Icon(Icons.login),
+                    onPressed: () {
+                      LoginRoute().push(context);
+                    },
+                  );
+                }
+              },
+            ),
           ],
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Text('cats'),
+          title: StreamBuilder<UserEntity?>(
+            stream: getIt<AuthService>().authStream,
+            initialData: getIt<AuthService>().user,
+            builder: (context, snapshot) {
+              final user = snapshot.data;
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('cats'),
+                  const SizedBox(width: 8),
+                  Text(
+                    user != null ? '(Logged in: ${user.username})' : '(Logged out)',
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
         body: const HomeView(),
       ),
