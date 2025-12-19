@@ -4,6 +4,7 @@ import 'package:data/data.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:test_3_35_7/features/auth/exception/auth_bloc_exception.dart';
+import 'package:test_3_35_7/service/service_locator.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -35,6 +36,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         password: event.password,
       );
       if (user != null) {
+        setupAuthScope();
         emit(LoginSuccess(user: user));
       } else {
         emit(LoginFailure(error: WrongPasswordAuthBlocException()));
