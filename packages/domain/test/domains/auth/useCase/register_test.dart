@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cats_repository/cats_repository.dart';
 import 'package:data/data.dart';
 import 'package:data/objectbox.g.dart';
 import 'package:domain/src/domains/auth/auth.dart';
@@ -23,7 +24,7 @@ void main() {
     late RegisterUseCase registerUC;
 
     setUp(() {
-      registerUC = RegisterUC.create(db: authDB);
+      registerUC = RegisterUC(repo: RegisterRepo(db: authDB));
     });
 
     test('should call handle on RegisterRepo', () async {
@@ -51,7 +52,7 @@ void main() {
 
         expect(
           () async => await registerUC(userName: userName, password: password),
-          throwsA(UsernameAlreadyExistsAuthException),
+          throwsA(isA<UsernameAlreadyExistsAuthException>()),
         );
       },
     );
