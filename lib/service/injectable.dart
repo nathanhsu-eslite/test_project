@@ -7,6 +7,8 @@ import 'injectable.config.dart';
 
 //初始化
 @InjectableInit(
+  initializerName: 'init',
+  asExtension: false,
   externalPackageModulesBefore: [ExternalModule(DomainPackageModule)],
 )
 Future<void> configureDependencies() => init(getIt);

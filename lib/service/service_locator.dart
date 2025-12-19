@@ -8,10 +8,6 @@ final getIt = GetIt.instance;
 
 void setupLocator() {
   getIt.registerLazySingleton(() => GetCatsImagesUC.dio(dio: getIt<Dio>()));
-
-  getIt.registerLazySingleton<RegisterUseCase>(
-    () => RegisterUC.create(db: getIt<AuthDBInterface>()),
-  );
 }
 
 void setupAuthScope() {

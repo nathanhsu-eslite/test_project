@@ -2,11 +2,13 @@ import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:test_3_35_7/features/auth/exception/auth_bloc_exception.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';
 
+@injectable
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterUseCase _registerUseCase;
 

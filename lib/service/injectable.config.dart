@@ -15,9 +15,11 @@ import 'package:dio/dio.dart' as _i361;
 import 'package:domain/domain.dart' as _i494;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
-
-import '../features/auth/blocs/login_bloc/login_bloc.dart' as _i121;
-import 'injectable.dart' as _i1027;
+import 'package:test_3_35_7/features/auth/blocs/login_bloc/login_bloc.dart'
+    as _i212;
+import 'package:test_3_35_7/features/auth/blocs/register_bloc/register_bloc.dart'
+    as _i1061;
+import 'package:test_3_35_7/service/injectable.dart' as _i913;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i174.GetIt> init(
@@ -31,10 +33,13 @@ Future<_i174.GetIt> init(
   await _i70.DataPackageModule().init(gh);
   final appModule = _$AppModule();
   gh.lazySingleton<_i361.Dio>(() => appModule.dio());
-  gh.factory<_i121.LoginBloc>(
-    () => _i121.LoginBloc(loginUseCase: gh<_i494.LoginUseCase>()),
+  gh.factory<_i1061.RegisterBloc>(
+    () => _i1061.RegisterBloc(registerUseCase: gh<_i494.RegisterUseCase>()),
+  );
+  gh.factory<_i212.LoginBloc>(
+    () => _i212.LoginBloc(loginUseCase: gh<_i494.LoginUseCase>()),
   );
   return getIt;
 }
 
-class _$AppModule extends _i1027.AppModule {}
+class _$AppModule extends _i913.AppModule {}
