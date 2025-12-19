@@ -20,7 +20,7 @@ class DataPackageModule extends _i526.MicroPackageModule {
       () => registerModule.store,
       preResolve: true,
     );
-    gh.factory<_i60.AuthDBInterface>(
+    gh.lazySingleton<_i60.AuthDBInterface>(
         () => _i60.AuthDB(store: gh<_i337.Store>()));
   }
 }

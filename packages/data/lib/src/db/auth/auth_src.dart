@@ -10,7 +10,7 @@ abstract interface class AuthDBInterface {
   Future<void> deleteUser(int id);
 }
 
-@Injectable(as: AuthDBInterface)
+@LazySingleton(as: AuthDBInterface)
 class AuthDB implements AuthDBInterface {
   final Box<UserEntity> _box;
 
