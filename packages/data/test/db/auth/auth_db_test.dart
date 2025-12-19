@@ -69,7 +69,7 @@ void main() {
       // Try to login again
       expect(
         () async => await authDB.login('testUser2', 'password'),
-        throwsA(UserNotFindAuthException),
+        throwsA(isA<UserNotFindAuthException>()),
       );
     });
   });

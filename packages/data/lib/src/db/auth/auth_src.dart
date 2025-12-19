@@ -2,6 +2,7 @@ import 'package:data/objectbox.g.dart';
 import 'package:data/src/db/auth/extension.dart';
 import 'package:data/src/db/auth/schema/schema.dart';
 import 'package:data/src/db/exception/auth_exception.dart';
+import 'package:injectable/injectable.dart';
 
 abstract interface class AuthDBInterface {
   Future<UserEntity?> login(String username, String password);
@@ -9,6 +10,7 @@ abstract interface class AuthDBInterface {
   Future<void> deleteUser(int id);
 }
 
+@Injectable(as: AuthDBInterface)
 class AuthDB implements AuthDBInterface {
   final Box<UserEntity> _box;
 
