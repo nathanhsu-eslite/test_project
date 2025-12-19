@@ -3,24 +3,12 @@ import 'package:data/objectbox.g.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:get_it/get_it.dart';
-import 'package:test_3_35_7/consts.dart';
 
 final getIt = GetIt.instance;
 
-void setupLocator({required Store store}) {
-  getIt.registerLazySingleton<Store>(() => store);
-
-  getIt.registerLazySingleton(
-    () => Dio(BaseOptions(headers: {'x-api-key': Consts.apiKey})),
-  );
-  getIt.registerLazySingleton<AuthDBInterface>(
-    () => AuthDB(store: getIt<Store>()),
-  );
+void setupLocator() {
   getIt.registerLazySingleton(() => GetCatsImagesUC.dio(dio: getIt<Dio>()));
 
-  getIt.registerLazySingleton<LoginUseCase>(
-    () => LoginUC.create(db: getIt<AuthDBInterface>()),
-  );
   getIt.registerLazySingleton<RegisterUseCase>(
     () => RegisterUC.create(db: getIt<AuthDBInterface>()),
   );
@@ -40,6 +28,7 @@ void setupAuthScope() {
   );
 }
 
+//favorite feature
 void _registerFavoriteService() {
   getIt.registerLazySingleton<FavoriteInterface>(
     () => FavoriteCatDB(store: getIt<Store>()),

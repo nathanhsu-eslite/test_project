@@ -2,11 +2,13 @@ import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:data/data.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:test_3_35_7/features/auth/exception/auth_bloc_exception.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
+@injectable
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUseCase _loginUseCase;
 
