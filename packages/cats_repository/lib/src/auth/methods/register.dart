@@ -2,7 +2,7 @@ import 'package:cats_repository/src/auth/methods/interface/register_interface.da
 import 'package:data/data.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: RegisterInterface)
+@LazySingleton(as: RegisterInterface)
 class RegisterRepo implements RegisterInterface {
   final AuthDBInterface db;
 

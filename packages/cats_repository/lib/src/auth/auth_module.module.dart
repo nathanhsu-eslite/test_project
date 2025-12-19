@@ -19,7 +19,7 @@ class CatsRepositoryPackageModule extends _i526.MicroPackageModule {
 // initializes the registration of main-scope dependencies inside of GetIt
   @override
   _i687.FutureOr<void> init(_i526.GetItHelper gh) {
-    gh.factory<_i453.LoginInterface>(
+    gh.lazySingleton<_i453.LoginInterface>(
         () => _i700.LoginRepo(db: gh<_i437.AuthDBInterface>()));
     gh.factory<_i1012.RegisterInterface>(
         () => _i703.RegisterRepo(db: gh<_i437.AuthDBInterface>()));

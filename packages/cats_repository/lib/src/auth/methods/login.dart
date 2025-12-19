@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import 'interface/login_interface.dart';
 
-@Injectable(as: LoginInterface)
+@LazySingleton(as: LoginInterface)
 class LoginRepo implements LoginInterface {
   final AuthDBInterface db;
 
