@@ -11,8 +11,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  injectable: ^2.7.1+2
   dio: ^5.9.0
   path_provider: ^2.1.5
+  
 
   cats_repository:
     path: ../cats_repository
@@ -24,9 +27,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   mocktail: ^1.0.4
   http_mock_adapter: ^0.6.1
+  build_runner: ^2.4.9
+  injectable_generator: ^2.8.1
+
 
 
 

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cats_repository/cats_repository.dart';
 import 'package:data/data.dart';
 import 'package:data/objectbox.g.dart';
 import 'package:domain/src/domains/auth/auth.dart';
@@ -24,7 +25,7 @@ void main() {
   group('LoginUC', () {
     late LoginUseCase loginUC;
     setUp(() {
-      loginUC = LoginUC.create(db: authDB);
+      loginUC = LoginUC(repo: LoginRepo(db: authDB));
     });
 
     test('should call handle on LoginRepo', () async {
@@ -54,7 +55,7 @@ void main() {
         expect(
           () async =>
               await loginUC.call(userName: userName, password: password),
-          throwsA(UserNotFindAuthException),
+          throwsA(isA<UserNotFindAuthException>()),
         );
       },
     );
