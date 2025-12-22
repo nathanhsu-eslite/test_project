@@ -3,6 +3,7 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_3_35_7/features/breeds_matcher/bloc/breeds_matcher_bloc.dart';
+import 'package:test_3_35_7/pages/match_result_page/match_result_widget.dart';
 import 'package:test_3_35_7/service/service_locator.dart';
 
 class MatchResultPage extends StatelessWidget {
@@ -38,33 +39,8 @@ class MatchResultView extends StatelessWidget {
               return ListView.builder(
                 itemCount: state.matchResult.length,
                 itemBuilder: (context, index) {
-                  final match = state.matchResult[index];
-                  final image = match.catModel;
-                  final breeds = image.breeds;
-
-                  return Card(
-                    margin: const EdgeInsets.all(8.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.network(
-                            image.url,
-                            height: 200,
-                            fit: BoxFit.contain,
-                            cacheHeight: image.urlHeight,
-                            cacheWidth: image.urlWidth,
-                          ),
-                          ListTile(
-                            title: Text(breeds!.first.name),
-                            subtitle: Text(
-                              'Score: ${match.score.toStringAsFixed(2)}',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  return MatchResultWidget(
+                    breedMatchResult: state.matchResult[index],
                   );
                 },
               );
@@ -78,3 +54,4 @@ class MatchResultView extends StatelessWidget {
     );
   }
 }
+

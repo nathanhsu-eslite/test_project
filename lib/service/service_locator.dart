@@ -3,35 +3,45 @@ import 'package:data/objectbox.g.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:get_it/get_it.dart';
-import 'package:test_3_35_7/consts.dart';
 
 final getIt = GetIt.instance;
 
-void setupLocator({required Store store}) {
-  getIt.registerLazySingleton<Store>(() => store);
+void setupLocator() {
+  getIt.registerLazySingleton(() => GetCatsImagesUC.dio(dio: getIt<Dio>()));
+}
+
+void setupAuthScope() {
+  //當登入時才能使用的功能
+  getIt.pushNewScope(
+    scopeName: 'logged-in',
+    init: (scope) {
+      _registerFavoriteService();
+      getIt.registerLazySingleton(() => GetCatDetailUC.dio(dio: getIt<Dio>()));
+      getIt.registerLazySingleton(
+        () => GetMatchResultUC.dio(dio: getIt<Dio>()),
+      );
+    },
+  );
+}
+
+//favorite feature
+void _registerFavoriteService() {
   getIt.registerLazySingleton<FavoriteInterface>(
     () => FavoriteCatDB(store: getIt<Store>()),
   );
-  getIt.registerLazySingleton<GetAllFavoriteUseCase>(
+  getIt.registerFactory<GetAllFavoriteUseCase>(
     () => GetAllFavoriteUC.create(db: getIt<FavoriteInterface>()),
   );
-  getIt.registerLazySingleton<FindFavoriteUseCase>(
+  getIt.registerFactory<FindFavoriteUseCase>(
     () => FindFavoriteUC.create(db: getIt<FavoriteInterface>()),
   );
-  getIt.registerLazySingleton<DeleteFavoriteUseCase>(
+  getIt.registerFactory<DeleteFavoriteUseCase>(
     () => DeleteFavoriteUC.create(db: getIt<FavoriteInterface>()),
   );
-  getIt.registerLazySingleton<ClearFavoriteUseCase>(
+  getIt.registerFactory<ClearFavoriteUseCase>(
     () => ClearFavoriteUC.create(db: getIt<FavoriteInterface>()),
   );
-  getIt.registerLazySingleton<AddFavoriteUseCase>(
+  getIt.registerFactory<AddFavoriteUseCase>(
     () => AddFavoriteUC.create(db: getIt<FavoriteInterface>()),
   );
-
-  getIt.registerLazySingleton(
-    () => Dio(BaseOptions(headers: {'x-api-key': Consts.apiKey})),
-  );
-  getIt.registerLazySingleton(() => GetCatsImagesUC.dio(dio: getIt<Dio>()));
-  getIt.registerLazySingleton(() => GetCatDetailUC.dio(dio: getIt<Dio>()));
-  getIt.registerLazySingleton(() => GetMatchResultUC.dio(dio: getIt<Dio>()));
 }

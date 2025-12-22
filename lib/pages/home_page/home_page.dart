@@ -2,16 +2,22 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_3_35_7/features/get_cat_images/bloc/get_cat_images_bloc.dart';
-import 'package:test_3_35_7/pages/error_page/error_page.dart';
-import 'package:test_3_35_7/pages/favorite_list_page/favorite_page.dart';
-import 'package:test_3_35_7/pages/home_page/widget/images_list.dart';
-import 'package:test_3_35_7/pages/preference_form_page/preference_form_page.dart';
 
+import 'package:test_3_35_7/pages/error_page/error_page.dart';
+import 'package:test_3_35_7/pages/home_page/widget/images_list.dart';
+import 'package:test_3_35_7/routes/app_routes.dart'; // Import authNotifier
+import 'package:test_3_35_7/routes/favorite_route.dart';
+import 'package:test_3_35_7/routes/home_route.dart';
+import 'package:test_3_35_7/routes/login_route.dart';
+
+import 'package:data/data.dart';
 import 'package:test_3_35_7/service/service_locator.dart';
 
+import '../../routes/preference_form_route.dart'; // Import UserEntity
+
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  final UserEntity? user;
+  const MyHomePage({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -23,26 +29,49 @@ class MyHomePage extends StatelessWidget {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FavoriteListPage()),
-              );
+              FavoriteRoute().push(context);
             },
-            icon: Icon(Icons.favorite_sharp),
+            icon: const Icon(Icons.favorite_sharp),
           ),
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PreferenceFormPage()),
-                );
+                PreferenceRoute().push(context);
               },
-              icon: Icon(Icons.filter_list),
+              icon: const Icon(Icons.filter_list),
             ),
+
+            user != null
+                ? IconButton(
+                    icon: const Icon(Icons.logout),
+                    onPressed: () async {
+                      await getIt.popScope();
+                      authNotifier.value = false;
+
+                      if (context.mounted) HomeRoute(null).go(context);
+                    },
+                  )
+                : IconButton(
+                    icon: const Icon(Icons.login),
+                    onPressed: () {
+                      LoginRoute().push(context);
+                    },
+                  ),
           ],
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(title),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('cats'),
+              const SizedBox(width: 8),
+              Text(
+                user != null
+                    ? '(Logged in: ${user!.username})'
+                    : '(Guest mode)',
+                style: const TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
         ),
         body: const HomeView(),
       ),

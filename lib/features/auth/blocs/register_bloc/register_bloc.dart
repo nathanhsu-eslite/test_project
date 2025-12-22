@@ -1,0 +1,51 @@
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
+import 'package:test_3_35_7/features/auth/exception/auth_bloc_exception.dart';
+
+part 'register_event.dart';
+part 'register_state.dart';
+
+@injectable
+class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
+  final RegisterUseCase _registerUseCase;
+
+  RegisterBloc({required RegisterUseCase registerUseCase})
+    : _registerUseCase = registerUseCase,
+      super(RegisterInitial()) {
+    on<RegisterSubmitted>(_onSubmitted);
+  }
+
+  Future<void> _onSubmitted(
+    RegisterSubmitted event,
+    Emitter<RegisterState> emit,
+  ) async {
+    if (event.username.trim().isEmpty ||
+        event.password.trim().isEmpty ||
+        event.confirmPassword.trim().isEmpty) {
+      emit(RegisterFailure(error: InvalidRegisterInputAuthBlocException()));
+
+      return;
+    }
+
+    if (event.password != event.confirmPassword) {
+      emit(RegisterFailure(error: PasswordMismatchAuthBlocException()));
+
+      return;
+    }
+
+    emit(RegisterInProgress());
+
+    try {
+      final user = await _registerUseCase.call(
+        userName: event.username,
+        password: event.password,
+      );
+      emit(RegisterSuccess(user: user));
+    } catch (e) {
+      emit(RegisterFailure(error: e));
+    }
+  }
+}
