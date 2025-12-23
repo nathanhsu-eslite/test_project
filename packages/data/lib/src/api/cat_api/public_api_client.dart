@@ -16,4 +16,13 @@ abstract class PublicApiClient {
 
   @GET('/images/{id}')
   Future<ImageModel> fetchCatData(@Path('id') String id);
+
+  @POST('/votes')
+  Future<VoteModel> voteCat(@Body() Map<String, dynamic> body);
+
+  @GET('/votes')
+  Future<List<VoteModel>> fetchVotes();
+
+  @DELETE('/votes/{id}')
+  Future<void> deleteVote(@Path('id') int id);
 }
