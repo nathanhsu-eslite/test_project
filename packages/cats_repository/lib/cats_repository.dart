@@ -5,3 +5,4 @@ export 'src/get_images_repository/get_images_repository.dart';
 export 'src/favorite_repository/favorite_repository.dart';
 export 'src/breed_matcher_repository/breed_matcher_repository.dart';
 export 'src/auth/auth.dart';
+export 'src/votes/votes.dart';
