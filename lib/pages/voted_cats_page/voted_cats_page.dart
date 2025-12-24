@@ -1,0 +1,104 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_3_35_7/features/votes/blocs/delete_vote/delete_votes_bloc.dart';
+import 'package:test_3_35_7/features/votes/blocs/get_votes/get_votes_bloc.dart';
+import 'package:test_3_35_7/pages/voted_cats_page/widget/voted_cat_card.dart';
+import 'package:test_3_35_7/service/service_locator.dart';
+import 'package:cats_repository/cats_repository.dart';
+
+class VotedCatsPage extends StatelessWidget {
+  const VotedCatsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => getIt<GetVotesBloc>()..add(GetVotes()),
+        ),
+        BlocProvider(create: (context) => getIt<DeleteVotesBloc>()),
+      ],
+      child: const VotedCatsView(),
+    );
+  }
+}
+
+class VotedCatsView extends StatelessWidget {
+  const VotedCatsView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Voted Cats')),
+      body: BlocListener<DeleteVotesBloc, DeleteVotesState>(
+        listener: (context, state) {
+          if (state is DeleteVotesSuccess) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(const SnackBar(content: Text('Vote deleted!')));
+            // Will be replaced with the new event
+          }
+          if (state is DeleteVotesError) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text('Failed to delete vote: ${state.exception}'),
+                ),
+              );
+          }
+        },
+        child: BlocBuilder<GetVotesBloc, GetVotesDataState>(
+          builder: (context, state) {
+            switch (state.status) {
+              case GetVotesStatus.loading:
+              case GetVotesStatus.initial:
+                return const Center(child: CircularProgressIndicator());
+              case GetVotesStatus.failure:
+                return Center(
+                  child: Text('Failed to load voted cats: ${state.error}'),
+                );
+              case GetVotesStatus.success:
+                if (state.votes.isEmpty) {
+                  return const Center(child: Text('No voted cats found.'));
+                }
+
+                final Map<String, List<VotesDataEntity>> groupedVotes = {};
+                for (var vote in state.votes) {
+                  (groupedVotes[vote.imageId] ??= []).add(vote);
+                }
+                final uniqueImageIds = groupedVotes.keys.toList();
+
+                return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8.0,
+                    mainAxisSpacing: 8.0,
+                    childAspectRatio: 0.8,
+                  ),
+                  itemCount: uniqueImageIds.length,
+                  padding: const EdgeInsets.all(8.0),
+                  itemBuilder: (context, index) {
+                    final imageId = uniqueImageIds[index];
+                    final votesForImage = groupedVotes[imageId]!;
+                    final firstVote = votesForImage.first;
+                    final voteCount = votesForImage.length;
+
+                    return VotedCatCard(
+                      vote: firstVote,
+                      voteCount: voteCount,
+                      onDelete: () {
+                        context.read<DeleteVotesBloc>().add(
+                          DeleteVote(firstVote.imageId),
+                        );
+                      },
+                    );
+                  },
+                );
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
