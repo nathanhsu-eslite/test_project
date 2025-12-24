@@ -12,22 +12,15 @@ class GetVotesBloc extends Bloc<GetVotesEvent, GetVotesDataState> {
   final GetVotesUseCase getVotesUseCase;
 
   GetVotesBloc({required this.getVotesUseCase})
-      : super(const GetVotesDataState(status: GetVotesStatus.initial)) {
+    : super(const GetVotesDataState(status: GetVotesStatus.initial)) {
     on<GetVotes>(_onGetVotes);
   }
 
-  Future<void> _onGetVotes(
-    GetVotes event,
-    Emitter<GetVotesState> emit,
-  ) async {
-    if (state.hasReachedMax) return;
-
+  Future<void> _onGetVotes(GetVotes event, Emitter<GetVotesState> emit) async {
     try {
       final isInitialLoad = state.status == GetVotesStatus.initial;
       if (isInitialLoad) {
         emit(state.copyWith(status: GetVotesStatus.loading));
-      } else {
-        emit(state.copyWith(status: GetVotesStatus.loadingMore));
       }
 
       final newVotes = await getVotesUseCase.call();
@@ -42,12 +35,7 @@ class GetVotesBloc extends Bloc<GetVotesEvent, GetVotesDataState> {
           );
           return;
         } else {
-          emit(
-            state.copyWith(
-              hasReachedMax: true,
-              status: GetVotesStatus.success,
-            ),
-          );
+          emit(state.copyWith(status: GetVotesStatus.success));
           return;
         }
       }
@@ -56,16 +44,10 @@ class GetVotesBloc extends Bloc<GetVotesEvent, GetVotesDataState> {
         state.copyWith(
           status: GetVotesStatus.success,
           votes: isInitialLoad ? newVotes : [...state.votes, ...newVotes],
-          hasReachedMax: newVotes.isEmpty,
         ),
       );
     } catch (e) {
-      emit(
-        state.copyWith(
-          status: GetVotesStatus.failure,
-          error: e,
-        ),
-      );
+      emit(state.copyWith(status: GetVotesStatus.failure, error: e));
     }
   }
 }
