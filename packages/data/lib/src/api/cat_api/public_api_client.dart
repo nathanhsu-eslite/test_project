@@ -1,11 +1,14 @@
 import 'package:data/src/api/cat_api/models/models.dart';
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'public_api_client.g.dart';
 
+@lazySingleton
 @RestApi(baseUrl: 'https://api.thecatapi.com/v1')
 abstract class PublicApiClient {
+  @factoryMethod
   factory PublicApiClient(Dio dio) = _PublicApiClient;
 
   @GET('/images/search')
