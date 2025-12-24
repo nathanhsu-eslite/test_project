@@ -4,24 +4,34 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:get_it/get_it.dart';
 
+import 'dart:developer' as dev;
+
 final getIt = GetIt.instance;
 
-void setupLocator() {
-  getIt.registerLazySingleton(() => GetCatsImagesUC.dio(dio: getIt<Dio>()));
-}
+void setupLocator() {}
 
 void setupAuthScope() {
   //當登入時才能使用的功能
   getIt.pushNewScope(
     scopeName: 'logged-in',
     init: (scope) {
-      _registerFavoriteService();
+      dev.log('setupAuthScope');
+
+      _registerMatchService();
       getIt.registerLazySingleton(() => GetCatDetailUC.dio(dio: getIt<Dio>()));
-      getIt.registerLazySingleton(
-        () => GetMatchResultUC.dio(dio: getIt<Dio>()),
-      );
     },
   );
+  getIt.pushNewScope(
+    scopeName: 'favorite',
+    init: (scope) {
+      dev.log('setupFavoriteScope');
+      _registerFavoriteService();
+    },
+  );
+}
+
+void _registerMatchService() {
+  getIt.registerFactory(() => GetMatchResultUC.dio(dio: getIt<Dio>()));
 }
 
 //favorite feature
