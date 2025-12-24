@@ -148,5 +148,128 @@ void main() {
         );
       });
     });
+
+    group('voteCat', () {
+      test('completes successfully on valid vote', () async {
+        const path = '/votes';
+        final data = {'image_id': 'testId', 'value': 1};
+        final responseData = <String, dynamic>{
+          'id': 123,
+          'image_id': 'testId',
+          'sub_id': 'subId1',
+          'created_at': '2024-01-01T00:00:00.000Z',
+          'country_code': 'US',
+          'value': 1,
+        };
+
+        dioAdapter.onPost(
+          path,
+          (server) => server.reply(200, responseData),
+          data: data,
+        );
+
+        final result = await publicApiClient.voteCat(data);
+
+        expect(result, isA<VoteModel>());
+        expect(result.id, 123);
+        expect(result.imageId, 'testId');
+        expect(result.value, 1);
+      });
+
+      test('throws an exception on failed vote', () async {
+        const path = '/votes';
+        final data = {'image_id': 'testId', 'value': 1};
+        dioAdapter.onPost(
+          path,
+          (server) => server.throws(
+            500,
+            DioException(requestOptions: RequestOptions(path: '')),
+          ),
+          data: data,
+        );
+
+        expect(
+          () => publicApiClient.voteCat(data),
+          throwsA(isA<DioException>()),
+        );
+      });
+    });
+
+    group('fetchVotes', () {
+      test('returns a list of VoteModel on successful fetch', () async {
+        const path = '/votes';
+        final responseData = r'''
+          [
+            {
+              "id": 1,
+              "image_id": "imageId1",
+              "sub_id": "subId1",
+              "created_at": "2024-01-01T00:00:00.000Z",
+              "country_code": "US",
+              "value": 1,
+              "image": {
+                "id": "imageId1",
+                "url": "http://some.url/cat1.jpg"
+              }
+            }
+          ]
+        ''';
+
+        dioAdapter.onGet(
+          path,
+          (server) => server.reply(200, jsonDecode(responseData)),
+        );
+
+        final result = await publicApiClient.fetchVotes();
+
+        expect(result, isA<List<VoteModel>>());
+        expect(result.length, 1);
+        expect(result.first.id, 1);
+        expect(result.first.voteImage, isA<ImageModel>());
+      });
+
+      test('throws an exception on failed fetch', () async {
+        const path = '/votes';
+        dioAdapter.onGet(
+          path,
+          (server) => server.throws(
+            500,
+            DioException(requestOptions: RequestOptions(path: '')),
+          ),
+        );
+
+        expect(
+          () => publicApiClient.fetchVotes(),
+          throwsA(isA<DioException>()),
+        );
+      });
+    });
+
+    group('deleteVote', () {
+      test('completes successfully on valid delete', () async {
+        const voteId = 123;
+        const path = '/votes/$voteId';
+        dioAdapter.onDelete(path, (server) => server.reply(200, {}));
+
+        await publicApiClient.deleteVote(voteId);
+      });
+
+      test('throws an exception on failed delete', () async {
+        const voteId = 123;
+        const path = '/votes/$voteId';
+        dioAdapter.onDelete(
+          path,
+          (server) => server.throws(
+            500,
+            DioException(requestOptions: RequestOptions(path: '')),
+          ),
+        );
+
+        expect(
+          () => publicApiClient.deleteVote(voteId),
+          throwsA(isA<DioException>()),
+        );
+      });
+    });
   });
 }
