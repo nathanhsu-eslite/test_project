@@ -9,16 +9,16 @@ class ImageModel {
   final String id;
   final String url;
   @JsonKey(name: 'height')
-  final int urlHeight;
+  final int? urlHeight;
   @JsonKey(name: 'width')
-  final int urlWidth;
+  final int? urlWidth;
   final List<BreedModel>? breeds;
 
   ImageModel({
     required this.id,
     required this.url,
-    required this.urlHeight,
-    required this.urlWidth,
+    this.urlHeight,
+    this.urlWidth,
     this.breeds,
   });
   factory ImageModel.fromJson(Map<String, dynamic> json) =>
