@@ -10,7 +10,7 @@ VoteModel _$VoteModelFromJson(Map<String, dynamic> json) => VoteModel(
   id: (json['id'] as num).toInt(),
   imageId: json['image_id'] as String,
   subId: json['sub_id'] as String,
-  createdAt: json['created_at'] as String,
+  createdAt: json['created_at'] as String?,
   countryCode: json['country_code'] as String,
   value: (json['value'] as num).toInt(),
   voteImage: json['image'] == null

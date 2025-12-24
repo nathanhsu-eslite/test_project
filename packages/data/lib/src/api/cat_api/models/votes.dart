@@ -11,7 +11,7 @@ class VoteModel {
   @JsonKey(name: 'sub_id')
   final String subId;
   @JsonKey(name: 'created_at')
-  final String createdAt;
+  final String? createdAt;
   @JsonKey(name: 'country_code')
   final String countryCode;
   final int value;
@@ -25,7 +25,7 @@ class VoteModel {
     required this.id,
     required this.imageId,
     required this.subId,
-    required this.createdAt,
+    this.createdAt,
     required this.countryCode,
     required this.value,
     this.voteImage,
