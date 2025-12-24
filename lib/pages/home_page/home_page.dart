@@ -1,4 +1,3 @@
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_3_35_7/features/get_cat_images/bloc/get_cat_images_bloc.dart';
@@ -11,9 +10,10 @@ import 'package:test_3_35_7/routes/home_route.dart';
 import 'package:test_3_35_7/routes/login_route.dart';
 
 import 'package:data/data.dart';
+import 'package:test_3_35_7/routes/vote_route.dart';
+import 'package:test_3_35_7/routes/voted_cats_route.dart';
 import 'package:test_3_35_7/service/service_locator.dart';
-
-import '../../routes/preference_form_route.dart'; // Import UserEntity
+import 'dart:developer' as dev;
 
 class MyHomePage extends StatelessWidget {
   final UserEntity? user;
@@ -22,9 +22,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          GetCatImagesBloc(getCatsImagesUseCase: getIt<GetCatsImagesUC>())
-            ..add(GetCatImages()),
+      create: (context) => getIt<GetCatImagesBloc>()..add(GetCatImages()),
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -36,16 +34,23 @@ class MyHomePage extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                PreferenceRoute().push(context);
+                const VotedCatsRoute().push(context);
               },
-              icon: const Icon(Icons.filter_list),
+              icon: const Icon(Icons.show_chart),
             ),
-
+            IconButton(
+              onPressed: () {
+                VoteRoute(user).push(context);
+              },
+              icon: const Icon(Icons.how_to_vote),
+            ),
             user != null
                 ? IconButton(
                     icon: const Icon(Icons.logout),
                     onPressed: () async {
-                      await getIt.popScope();
+                      await getIt.popScopesTill('logged-in').then((_) {
+                        dev.log('Logged-in scope popped');
+                      });
                       authNotifier.value = false;
 
                       if (context.mounted) HomeRoute(null).go(context);
@@ -62,7 +67,6 @@ class MyHomePage extends StatelessWidget {
           title: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('cats'),
               const SizedBox(width: 8),
               Text(
                 user != null
