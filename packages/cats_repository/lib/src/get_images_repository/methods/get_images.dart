@@ -2,7 +2,9 @@ import 'package:cats_repository/cats_repository.dart';
 import 'package:cats_repository/src/get_images_repository/methods/get_images_interface.dart';
 
 import 'package:data/data.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: GetImagesInterface)
 class GetImagesRepo implements GetImagesInterface {
   final PublicApiClient _apiClient;
 
@@ -22,8 +24,8 @@ class GetImagesRepo implements GetImagesInterface {
             CatImageEntity(
               id: catModel.id,
               url: catModel.url,
-              urlHeight: catModel.urlHeight,
-              urlWidth: catModel.urlWidth,
+              urlHeight: catModel.urlHeight!,
+              urlWidth: catModel.urlWidth!,
             ),
           );
         }
