@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:test_3_35_7/features/get_cat_images/exception/exception.dart';
 import 'package:test_3_35_7/features/get_cat_images/models/my_image.dart';
 
@@ -8,6 +9,7 @@ import 'package:domain/domain.dart';
 part 'get_cat_images_event.dart';
 part 'get_cat_images_state.dart';
 
+@injectable
 class GetCatImagesBloc extends Bloc<GetCatImagesEvent, GetCatImagesDataState> {
   GetCatImagesBloc({required this.getCatsImagesUseCase})
     : super(const GetCatImagesDataState(status: CatImagesStatus.initial)) {
