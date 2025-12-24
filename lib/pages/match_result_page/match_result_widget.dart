@@ -17,8 +17,8 @@ class MatchResultWidget extends StatelessWidget {
           MyImage(
             id: image.id,
             url: image.url,
-            width: image.urlWidth,
-            height: image.urlWidth,
+            width: image.urlWidth!,
+            height: image.urlHeight!,
           ),
         ).push(context);
       },
