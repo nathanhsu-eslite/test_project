@@ -8,6 +8,7 @@ import 'package:test_3_35_7/routes/preference_form_route.dart' as preference;
 import 'package:test_3_35_7/routes/login_route.dart' as login;
 import 'package:test_3_35_7/routes/register_route.dart' as register;
 import 'package:test_3_35_7/routes/vote_route.dart' as vote;
+import 'package:test_3_35_7/routes/voted_cats_route.dart' as voted_cats;
 
 final authNotifier = ValueNotifier<bool>(false);
 
@@ -20,6 +21,7 @@ final GoRouter router = GoRouter(
     ...login.$appRoutes,
     ...register.$appRoutes,
     ...vote.$appRoutes,
+    ...voted_cats.$appRoutes,
   ],
   redirect: (BuildContext context, GoRouterState state) {
     final loggedIn = authNotifier.value;
