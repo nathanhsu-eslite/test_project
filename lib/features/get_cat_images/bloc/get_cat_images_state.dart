@@ -14,7 +14,7 @@ sealed class GetCatImagesState extends Equatable {
     this.error,
     required this.status,
   });
-  copyWith();
+  GetCatImagesState copyWith();
   @override
   List<Object?> get props => [images, hasReachedMax, error, status];
 }
