@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cats_repository/cats_repository.dart';
+import 'package:data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/src/domains/cat/cat.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,7 +16,9 @@ void main() {
     setUp(() {
       dio = Dio(BaseOptions(baseUrl: 'https://api.thecatapi.com/v1'));
       dioAdapter = DioAdapter(dio: dio);
-      getImagesUC = GetCatsImagesUC.dio(dio: dio);
+      getImagesUC = GetCatsImagesUC(
+        getImages: GetImagesRepo(apiClient: PublicApiClient(dio)),
+      );
     });
 
     test('should get cat images from the repository', () async {
