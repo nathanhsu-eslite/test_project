@@ -41,23 +41,23 @@ void main() {
     });
 
     group('GetVotes', () {
-      blocTest<GetVotesBloc, GetVotesState>(
+      blocTest<GetVotesBloc, GetVotesDataState>(
         'emits [loading, success] when get votes succeeds',
         setUp: () {
           when(() => getVotesUseCase()).thenAnswer((_) async => mockVotes);
         },
         build: buildBloc,
         act: (bloc) => bloc.add(GetVotes()),
-        expect: () => <GetVotesState>[
+        expect: () => <GetVotesDataState>[
           const GetVotesDataState(status: GetVotesStatus.loading),
           GetVotesDataState(
             status: GetVotesStatus.success,
-            votes: mockVotes,
+            groupedVotes: {'imageId': mockVotes},
           ),
         ],
       );
 
-      blocTest<GetVotesBloc, GetVotesState>(
+      blocTest<GetVotesBloc, GetVotesDataState>(
         'emits [loading, failure] when get votes fails',
         setUp: () {
           when(
@@ -66,12 +66,9 @@ void main() {
         },
         build: buildBloc,
         act: (bloc) => bloc.add(GetVotes()),
-        expect: () => <GetVotesState>[
+        expect: () => <GetVotesDataState>[
           const GetVotesDataState(status: GetVotesStatus.loading),
-          GetVotesDataState(
-            status: GetVotesStatus.failure,
-            error: exception,
-          ),
+          GetVotesDataState(status: GetVotesStatus.failure, error: exception),
         ],
       );
     });
