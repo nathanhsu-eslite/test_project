@@ -4,7 +4,6 @@ import 'package:test_3_35_7/features/votes/blocs/delete_vote/delete_votes_bloc.d
 import 'package:test_3_35_7/features/votes/blocs/get_votes/get_votes_bloc.dart';
 import 'package:test_3_35_7/pages/voted_cats_page/widget/voted_cat_card.dart';
 import 'package:test_3_35_7/service/service_locator.dart';
-import 'package:cats_repository/cats_repository.dart';
 
 class VotedCatsPage extends StatelessWidget {
   const VotedCatsPage({super.key});
@@ -36,7 +35,7 @@ class VotedCatsView extends StatelessWidget {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(const SnackBar(content: Text('Vote deleted!')));
-            // Will be replaced with the new event
+            context.read<GetVotesBloc>().add(GetVotes());
           }
           if (state is DeleteVotesError) {
             ScaffoldMessenger.of(context)
@@ -59,15 +58,11 @@ class VotedCatsView extends StatelessWidget {
                   child: Text('Failed to load voted cats: ${state.error}'),
                 );
               case GetVotesStatus.success:
-                if (state.votes.isEmpty) {
+                if (state.groupedVotes.isEmpty) {
                   return const Center(child: Text('No voted cats found.'));
                 }
 
-                final Map<String, List<VotesDataEntity>> groupedVotes = {};
-                for (var vote in state.votes) {
-                  (groupedVotes[vote.imageId] ??= []).add(vote);
-                }
-                final uniqueImageIds = groupedVotes.keys.toList();
+                final uniqueImageIds = state.groupedVotes.keys.toList();
 
                 return GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -80,7 +75,7 @@ class VotedCatsView extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   itemBuilder: (context, index) {
                     final imageId = uniqueImageIds[index];
-                    final votesForImage = groupedVotes[imageId]!;
+                    final votesForImage = state.groupedVotes[imageId]!;
                     final firstVote = votesForImage.first;
                     final voteCount = votesForImage.length;
 

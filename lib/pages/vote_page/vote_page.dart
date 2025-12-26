@@ -5,6 +5,7 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:test_3_35_7/features/get_cat_images/bloc/get_cat_images_bloc.dart';
 import 'package:test_3_35_7/features/get_cat_images/models/my_image.dart';
 import 'package:test_3_35_7/features/votes/blocs/vote_cat/vote_cat_bloc.dart';
+import 'package:test_3_35_7/routes/vote_route.dart';
 import 'package:test_3_35_7/service/service_locator.dart';
 
 class VotePage extends StatelessWidget {
@@ -61,7 +62,18 @@ class _VoteViewState extends State<VoteView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Vote for Cats')),
+      appBar: AppBar(
+        title: const Text('Vote for Cats'),
+        actions: [
+          ElevatedButton.icon(
+            onPressed: () {
+              const VotedCatsRoute().push(context);
+            },
+            label: Text('voted list'),
+            icon: Icon(Icons.thumb_up),
+          ),
+        ],
+      ),
       body: _buildBody(context),
     );
   }

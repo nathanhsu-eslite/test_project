@@ -11,7 +11,6 @@ import 'package:test_3_35_7/routes/login_route.dart';
 
 import 'package:data/data.dart';
 import 'package:test_3_35_7/routes/vote_route.dart';
-import 'package:test_3_35_7/routes/voted_cats_route.dart';
 import 'package:test_3_35_7/service/service_locator.dart';
 import 'dart:developer' as dev;
 
@@ -32,12 +31,6 @@ class MyHomePage extends StatelessWidget {
             icon: const Icon(Icons.favorite_sharp),
           ),
           actions: [
-            IconButton(
-              onPressed: () {
-                const VotedCatsRoute().push(context);
-              },
-              icon: const Icon(Icons.show_chart),
-            ),
             IconButton(
               onPressed: () {
                 VoteRoute(user).push(context);
