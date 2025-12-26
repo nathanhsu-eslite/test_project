@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:test_3_35_7/features/get_cat_images/bloc/get_cat_images_bloc.dart';
 
-import 'package:test_3_35_7/pages/error_page/error_page.dart';
-import 'package:test_3_35_7/pages/home_page/widget/images_list.dart';
 import 'package:test_3_35_7/routes/app_routes.dart'; // Import authNotifier
 import 'package:test_3_35_7/routes/favorite_route.dart';
-import 'package:test_3_35_7/routes/home_route.dart';
+import 'package:test_3_35_7/routes/images_route.dart';
 import 'package:test_3_35_7/routes/login_route.dart';
 
-import 'package:data/data.dart';
-import 'package:test_3_35_7/routes/vote_route.dart';
 import 'package:test_3_35_7/service/service_locator.dart';
 import 'dart:developer' as dev;
 
 class MyHomePage extends StatelessWidget {
-  final UserEntity? user;
-  const MyHomePage({super.key, required this.user});
+  const MyHomePage({super.key, required this.navigationShell});
+  final StatefulNavigationShell navigationShell;
 
+  void _goBranch(int index) => navigationShell.goBranch(
+    index,
+    initialLocation: index == navigationShell.currentIndex,
+  );
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -31,13 +32,7 @@ class MyHomePage extends StatelessWidget {
             icon: const Icon(Icons.favorite_sharp),
           ),
           actions: [
-            IconButton(
-              onPressed: () {
-                VoteRoute(user).push(context);
-              },
-              icon: const Icon(Icons.how_to_vote),
-            ),
-            user != null
+            authNotifier.value
                 ? IconButton(
                     icon: const Icon(Icons.logout),
                     onPressed: () async {
@@ -46,7 +41,7 @@ class MyHomePage extends StatelessWidget {
                       });
                       authNotifier.value = false;
 
-                      if (context.mounted) HomeRoute(null).go(context);
+                      if (context.mounted) ImagesRoute().go(context);
                     },
                   )
                 : IconButton(
@@ -62,79 +57,29 @@ class MyHomePage extends StatelessWidget {
             children: [
               const SizedBox(width: 8),
               Text(
-                user != null
-                    ? '(Logged in: ${user!.username})'
-                    : '(Guest mode)',
+                authNotifier.value ? '(Logged in)' : '(Guest mode)',
                 style: const TextStyle(fontSize: 12),
               ),
             ],
           ),
         ),
-        body: const HomeView(),
+        body: navigationShell,
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: navigationShell.currentIndex,
+          onTap: _goBranch,
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.image), label: 'Images'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.room_preferences),
+              label: 'Preference',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.how_to_vote),
+              label: 'Vote',
+            ),
+          ],
+        ),
       ),
     );
-  }
-}
-
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
-
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<GetCatImagesBloc, GetCatImagesState>(
-      builder: (context, state) {
-        switch (state.status) {
-          case CatImagesStatus.initial:
-          case CatImagesStatus.loading:
-            return const Center(child: CircularProgressIndicator());
-          case CatImagesStatus.success:
-          case CatImagesStatus.loadingMore:
-            return RefreshIndicator(
-              onRefresh: () async {
-                context.read<GetCatImagesBloc>().add(CatImageRefreshed());
-              },
-              child: ImagesList(
-                images: state.images,
-                hasReachedMax: state.hasReachedMax,
-                controller: _scrollController,
-              ),
-            );
-          case CatImagesStatus.failure:
-            return ErrorPage(error: state.error);
-        }
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_isBottom) context.read<GetCatImagesBloc>().add(GetCatImages());
-  }
-
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
   }
 }
