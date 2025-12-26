@@ -9,16 +9,29 @@ part 'delete_votes_state.dart';
 @injectable
 class DeleteVotesBloc extends Bloc<DeleteVotesEvent, DeleteVotesState> {
   final DeleteVotesUseCase deleteVotesUseCase;
+  final GetVotesUseCase getVotesUseCase;
 
-  DeleteVotesBloc({required this.deleteVotesUseCase})
-    : super(DeleteVotesInitial()) {
+  DeleteVotesBloc({
+    required this.deleteVotesUseCase,
+    required this.getVotesUseCase,
+  }) : super(DeleteVotesInitial()) {
     on<DeleteVote>((event, emit) async {
       emit(DeleteVotesLoading());
       try {
-        await deleteVotesUseCase.call(event.id);
+        final allVotes = await getVotesUseCase.call();
+        // Find votes matching the imageId
+        final votesToDelete = allVotes.where(
+          (vote) => vote.imageId == event.imageId,
+        );
+
+        final deleteFutures = votesToDelete
+            .map((vote) => deleteVotesUseCase.call(vote.id))
+            .toList();
+
+        await Future.wait(deleteFutures);
         emit(DeleteVotesSuccess());
       } catch (e) {
-        emit(DeleteVotesError(e)); // Emit the exception
+        emit(DeleteVotesError(e));
       }
     });
   }

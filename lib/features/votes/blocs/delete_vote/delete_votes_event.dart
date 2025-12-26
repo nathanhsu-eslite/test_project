@@ -8,10 +8,10 @@ abstract class DeleteVotesEvent extends Equatable {
 }
 
 class DeleteVote extends DeleteVotesEvent {
-  final int id;
+  final String imageId;
 
-  const DeleteVote(this.id);
+  const DeleteVote(this.imageId);
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [imageId];
 }

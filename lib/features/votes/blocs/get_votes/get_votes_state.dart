@@ -1,51 +1,30 @@
 part of 'get_votes_bloc.dart';
 
-enum GetVotesStatus { initial, loading, success, failure, loadingMore }
+enum GetVotesStatus { initial, loading, success, failure }
 
-sealed class GetVotesState extends Equatable {
-  final List<VotesDataEntity> votes;
-  final bool hasReachedMax;
+class GetVotesDataState extends Equatable {
+  final Map<String, List<VotesDataEntity>> groupedVotes;
   final Object? error;
   final GetVotesStatus status;
 
-  const GetVotesState({
-    this.votes = const [],
-    this.hasReachedMax = false,
+  const GetVotesDataState({
+    this.groupedVotes = const {},
     this.error,
     required this.status,
   });
 
-  GetVotesState copyWith({
-    List<VotesDataEntity>? votes,
-    bool? hasReachedMax,
-    Object? error,
-    GetVotesStatus? status,
-  });
-
-  @override
-  List<Object?> get props => [votes, hasReachedMax, error, status];
-}
-
-final class GetVotesDataState extends GetVotesState {
-  const GetVotesDataState({
-    required super.status,
-    super.votes,
-    super.hasReachedMax,
-    super.error,
-  });
-
-  @override
   GetVotesDataState copyWith({
-    GetVotesStatus? status,
-    List<VotesDataEntity>? votes,
-    bool? hasReachedMax,
+    Map<String, List<VotesDataEntity>>? groupedVotes,
     Object? error,
+    GetVotesStatus? status,
   }) {
     return GetVotesDataState(
-      status: status ?? this.status,
-      votes: votes ?? this.votes,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+      groupedVotes: groupedVotes ?? this.groupedVotes,
       error: error ?? this.error,
+      status: status ?? this.status,
     );
   }
+
+  @override
+  List<Object?> get props => [groupedVotes, error, status];
 }

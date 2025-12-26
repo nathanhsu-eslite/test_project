@@ -59,6 +59,7 @@ Future<_i174.GetIt> init(
   gh.factory<_i227.DeleteVotesBloc>(
     () => _i227.DeleteVotesBloc(
       deleteVotesUseCase: gh<_i494.DeleteVotesUseCase>(),
+      getVotesUseCase: gh<_i494.GetVotesUseCase>(),
     ),
   );
   gh.factory<_i404.GetVotesBloc>(
