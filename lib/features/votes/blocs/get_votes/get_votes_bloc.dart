@@ -16,7 +16,15 @@ class GetVotesBloc extends Bloc<GetVotesEvent, GetVotesDataState> {
     on<GetVotes>(_onGetVotes);
   }
 
-  Future<void> _onGetVotes(GetVotes event, Emitter<GetVotesState> emit) async {
+  Future<void> _onGetVotes(
+    GetVotes event,
+    Emitter<GetVotesDataState> emit,
+  ) async {
+    // Only emit loading state if it's the initial load
+    if (state.status == GetVotesStatus.initial) {
+      emit(state.copyWith(status: GetVotesStatus.loading));
+    }
+
     try {
       final isInitialLoad = state.status == GetVotesStatus.initial;
       if (isInitialLoad) {
@@ -24,26 +32,14 @@ class GetVotesBloc extends Bloc<GetVotesEvent, GetVotesDataState> {
       }
 
       final newVotes = await getVotesUseCase.call();
-
-      if (newVotes.isEmpty) {
-        if (isInitialLoad) {
-          emit(
-            state.copyWith(
-              status: GetVotesStatus.failure,
-              error: Exception('Votes are empty'),
-            ),
-          );
-          return;
-        } else {
-          emit(state.copyWith(status: GetVotesStatus.success));
-          return;
-        }
+      final groupedVotes = <String, List<VotesDataEntity>>{};
+      for (var vote in newVotes) {
+        (groupedVotes[vote.imageId] ??= []).add(vote);
       }
-
       emit(
         state.copyWith(
           status: GetVotesStatus.success,
-          votes: isInitialLoad ? newVotes : [...state.votes, ...newVotes],
+          groupedVotes: groupedVotes,
         ),
       );
     } catch (e) {
