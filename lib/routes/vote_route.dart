@@ -42,6 +42,14 @@ class VotedCatsRoute extends GoRouteData with $VotedCatsRoute {
 
   @override
   Widget build(context, state) {
-    return const VotedCatsPage();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => GetIt.I.get<GetVotesBloc>()..add(GetVotes()),
+        ),
+        BlocProvider(create: (context) => GetIt.I.get<DeleteVotesBloc>()),
+      ],
+      child: const VotedCatsPage(),
+    );
   }
 }
