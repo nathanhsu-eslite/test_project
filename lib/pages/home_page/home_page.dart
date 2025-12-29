@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:test_3_35_7/features/auth/blocs/auth/auth_bloc.dart';
+import 'package:test_3_35_7/pages/home_page/widget/login_logout_button.dart';
 import 'package:test_3_35_7/routes/favorite_route.dart';
-import 'package:test_3_35_7/routes/images_route.dart';
-import 'package:test_3_35_7/routes/login_route.dart';
-import 'dart:developer' as dev;
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key, required this.navigationShell});
@@ -26,35 +23,7 @@ class MyHomePage extends StatelessWidget {
           },
           icon: const Icon(Icons.favorite_sharp),
         ),
-        actions: [
-          BlocBuilder<AuthBloc, AuthState>(
-            builder: (context, state) {
-              if (state.status == AuthStatus.authenticated) {
-                return IconButton(
-                  icon: const Icon(Icons.logout),
-                  onPressed: () async {
-                    await GetIt.I.popScopesTill('logged-in').then((_) {
-                      dev.log('Logged-in scope popped');
-                    });
-                    if (context.mounted) {
-                      context.read<AuthBloc>().add(
-                        const AuthStatusChanged(AuthStatus.unauthenticated),
-                      );
-                      ImagesRoute().go(context);
-                    }
-                  },
-                );
-              } else {
-                return IconButton(
-                  icon: const Icon(Icons.login),
-                  onPressed: () {
-                    LoginRoute().push(context);
-                  },
-                );
-              }
-            },
-          ),
-        ],
+        actions: [LogInOutButton()],
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Row(
           mainAxisSize: MainAxisSize.min,
