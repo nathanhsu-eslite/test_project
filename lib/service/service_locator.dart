@@ -6,22 +6,20 @@ import 'package:get_it/get_it.dart';
 
 import 'dart:developer' as dev;
 
-final getIt = GetIt.instance;
-
-void setupLocator() {}
-
 void setupAuthScope() {
   //當登入時才能使用的功能
-  getIt.pushNewScope(
+  GetIt.I.pushNewScope(
     scopeName: 'logged-in',
     init: (scope) {
       dev.log('setupAuthScope');
 
       _registerMatchService();
-      getIt.registerLazySingleton(() => GetCatDetailUC.dio(dio: getIt<Dio>()));
+      GetIt.I.registerLazySingleton(
+        () => GetCatDetailUC.dio(dio: GetIt.I<Dio>()),
+      );
     },
   );
-  getIt.pushNewScope(
+  GetIt.I.pushNewScope(
     scopeName: 'favorite',
     init: (scope) {
       dev.log('setupFavoriteScope');
@@ -31,27 +29,27 @@ void setupAuthScope() {
 }
 
 void _registerMatchService() {
-  getIt.registerFactory(() => GetMatchResultUC.dio(dio: getIt<Dio>()));
+  GetIt.I.registerFactory(() => GetMatchResultUC.dio(dio: GetIt.I<Dio>()));
 }
 
 //favorite feature
 void _registerFavoriteService() {
-  getIt.registerLazySingleton<FavoriteInterface>(
-    () => FavoriteCatDB(store: getIt<Store>()),
+  GetIt.I.registerLazySingleton<FavoriteInterface>(
+    () => FavoriteCatDB(store: GetIt.I<Store>()),
   );
-  getIt.registerFactory<GetAllFavoriteUseCase>(
-    () => GetAllFavoriteUC.create(db: getIt<FavoriteInterface>()),
+  GetIt.I.registerFactory<GetAllFavoriteUseCase>(
+    () => GetAllFavoriteUC.create(db: GetIt.I<FavoriteInterface>()),
   );
-  getIt.registerFactory<FindFavoriteUseCase>(
-    () => FindFavoriteUC.create(db: getIt<FavoriteInterface>()),
+  GetIt.I.registerFactory<FindFavoriteUseCase>(
+    () => FindFavoriteUC.create(db: GetIt.I<FavoriteInterface>()),
   );
-  getIt.registerFactory<DeleteFavoriteUseCase>(
-    () => DeleteFavoriteUC.create(db: getIt<FavoriteInterface>()),
+  GetIt.I.registerFactory<DeleteFavoriteUseCase>(
+    () => DeleteFavoriteUC.create(db: GetIt.I<FavoriteInterface>()),
   );
-  getIt.registerFactory<ClearFavoriteUseCase>(
-    () => ClearFavoriteUC.create(db: getIt<FavoriteInterface>()),
+  GetIt.I.registerFactory<ClearFavoriteUseCase>(
+    () => ClearFavoriteUC.create(db: GetIt.I<FavoriteInterface>()),
   );
-  getIt.registerFactory<AddFavoriteUseCase>(
-    () => AddFavoriteUC.create(db: getIt<FavoriteInterface>()),
+  GetIt.I.registerFactory<AddFavoriteUseCase>(
+    () => AddFavoriteUC.create(db: GetIt.I<FavoriteInterface>()),
   );
 }

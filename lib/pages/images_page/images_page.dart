@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:test_3_35_7/features/get_cat_images/bloc/get_cat_images_bloc.dart';
 
 import 'package:test_3_35_7/pages/error_page/error_page.dart';
 import 'package:test_3_35_7/pages/images_page/widget/images_list.dart';
-
-import 'package:test_3_35_7/service/service_locator.dart';
 
 class ImagesPage extends StatelessWidget {
   const ImagesPage({super.key});
@@ -13,7 +12,7 @@ class ImagesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<GetCatImagesBloc>()..add(GetCatImages()),
+      create: (context) => GetIt.I.get<GetCatImagesBloc>()..add(GetCatImages()),
       child: ImagesView(),
     );
   }
