@@ -4,50 +4,17 @@ import 'package:test_3_35_7/features/favorite/blocs/clear_favorite/clear_favorit
 import 'package:test_3_35_7/features/favorite/blocs/delete_favorite/delete_favorite_bloc.dart';
 import 'package:test_3_35_7/features/favorite/blocs/find_favorite/find_favorite_bloc.dart';
 import 'package:test_3_35_7/features/favorite/blocs/get_all_favorite/get_all_favorite_bloc.dart';
-import 'package:domain/domain.dart';
-import 'package:test_3_35_7/service/service_locator.dart';
 
-import 'widget/favorite_list.dart';
+import 'package:test_3_35_7/pages/favorite_list_page/widget/favorite_view.dart';
 
-class FavoriteListPage extends StatelessWidget {
+class FavoriteListPage extends StatefulWidget {
   const FavoriteListPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<GetAllFavoriteBloc>(
-          create: (context) =>
-              GetAllFavoriteBloc(getFavoriteUC: getIt<GetAllFavoriteUseCase>())
-                ..add(DoGetAllFavoriteEvent()),
-        ),
-        BlocProvider<FindFavoriteBloc>(
-          create: (context) =>
-              FindFavoriteBloc(findFavoriteUC: getIt<FindFavoriteUseCase>()),
-        ),
-        BlocProvider<DeleteFavoriteBloc>(
-          create: (context) => DeleteFavoriteBloc(
-            deleteFavoriteUC: getIt<DeleteFavoriteUseCase>(),
-          ),
-        ),
-        BlocProvider<ClearFavoriteBloc>(
-          create: (context) =>
-              ClearFavoriteBloc(clearFavoriteUC: getIt<ClearFavoriteUseCase>()),
-        ),
-      ],
-      child: const FavoriteView(),
-    );
-  }
+  State<FavoriteListPage> createState() => _FavoriteListPageState();
 }
 
-class FavoriteView extends StatefulWidget {
-  const FavoriteView({super.key});
-
-  @override
-  State<FavoriteView> createState() => _FavoriteViewState();
-}
-
-class _FavoriteViewState extends State<FavoriteView> {
+class _FavoriteListPageState extends State<FavoriteListPage> {
   bool _isSearchActive = false;
   final _textController = TextEditingController();
 
@@ -119,93 +86,14 @@ class _FavoriteViewState extends State<FavoriteView> {
           },
         ),
       ],
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Favorite List'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.clear_all),
-              onPressed: () {
-                context.read<ClearFavoriteBloc>().add(DoClearFavoriteEvent());
-              },
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _textController,
-                decoration: const InputDecoration(
-                  labelText: 'Search Favorite',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  if (value.isEmpty && _isSearchActive) {
-                    setState(() {
-                      _isSearchActive = false;
-                    });
-                  }
-                },
-                onSubmitted: (value) {
-                  if (value.isNotEmpty) {
-                    setState(() {
-                      _isSearchActive = true;
-                    });
-                    context.read<FindFavoriteBloc>().add(
-                      FindFavoriteByName(value),
-                    );
-                  } else {
-                    setState(() {
-                      _isSearchActive = false;
-                    });
-                  }
-                },
-              ),
-            ),
-            Expanded(
-              child: _isSearchActive
-                  ? BlocBuilder<FindFavoriteBloc, FindFavoriteState>(
-                      builder: (context, state) {
-                        if (state is FindFavoriteDataState) {
-                          if (state.status == FindFavoriteStatus.loading) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          if (state.status == FindFavoriteStatus.success) {
-                            return FavoriteList(favorites: state.favorites);
-                          }
-                          if (state.status == FindFavoriteStatus.failure) {
-                            return Center(
-                              child: Text(
-                                state.errorMessage ?? 'Search failed',
-                              ),
-                            );
-                          }
-                        }
-                        return Container();
-                      },
-                    )
-                  : BlocBuilder<GetAllFavoriteBloc, GetAllFavoriteState>(
-                      builder: (context, state) {
-                        if (state.status == GetAllFavoriteStatus.loading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        if (state.status == GetAllFavoriteStatus.success) {
-                          return FavoriteList(favorites: state.favorites);
-                        }
-                        return const Center(
-                          child: Text('Press the button to load favorites.'),
-                        );
-                      },
-                    ),
-            ),
-          ],
-        ),
+      child: FavoriteView(
+        isSearchActive: _isSearchActive,
+        textController: _textController,
+        onSearchStatusChanged: (bool p1) {
+          setState(() {
+            _isSearchActive = p1;
+          });
+        },
       ),
     );
   }

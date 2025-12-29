@@ -24,16 +24,21 @@ class FavoriteList extends StatelessWidget {
       itemCount: favorites.length,
       itemBuilder: (context, index) {
         final favorite = favorites[index];
-        return GestureDetector(
-          onTap: () {
-            DetailRoute(
+        return InkWell(
+          onTap: () async {
+            final result = await DetailRoute(
               MyImage(
                 id: favorite.imageId,
                 url: favorite.url,
                 height: favorite.urlHeight,
                 width: favorite.urlWidth,
               ),
-            ).push(context);
+            ).push<bool>(context);
+            if (result == true) {
+              if (context.mounted) {
+                context.read<GetAllFavoriteBloc>().add(DoGetAllFavoriteEvent());
+              }
+            }
           },
           child: Card(
             margin: const EdgeInsets.all(8.0),
