@@ -16,6 +16,7 @@ import 'package:domain/domain.dart' as _i494;
 import 'package:domain/src/domains/domain_module.module.dart' as _i139;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:test_3_35_7/features/auth/blocs/auth/auth_bloc.dart' as _i123;
 import 'package:test_3_35_7/features/auth/blocs/login_bloc/login_bloc.dart'
     as _i212;
 import 'package:test_3_35_7/features/auth/blocs/register_bloc/register_bloc.dart'
@@ -42,6 +43,7 @@ Future<_i174.GetIt> init(
   await _i139.DomainPackageModule().init(gh);
   final appModule = _$AppModule();
   gh.lazySingleton<_i361.Dio>(() => appModule.dio());
+  gh.lazySingleton<_i123.AuthBloc>(() => _i123.AuthBloc());
   gh.factory<_i1061.RegisterBloc>(
     () => _i1061.RegisterBloc(registerUseCase: gh<_i494.RegisterUseCase>()),
   );
