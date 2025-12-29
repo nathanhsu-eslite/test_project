@@ -26,31 +26,44 @@ class ImagesList extends StatelessWidget {
           );
         }
         final image = images[index];
-        return GestureDetector(
+        return InkWell(
           onTap: () {
             DetailRoute(image).push(context);
           },
           child: Card(
             margin: const EdgeInsets.all(8.0),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.network(
-                    image.url,
-                    width: double.infinity,
-                    height: 200,
-                    fit: BoxFit.contain,
-                    cacheHeight: image.height,
-                    cacheWidth: image.width,
-                  ),
-                ],
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.network(
+                  image.url,
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.contain,
+                  cacheHeight: image.height ~/ 5,
+                  cacheWidth: image.width ~/ 5,
+                ),
+              ],
             ),
           ),
         );
       },
+      prototypeItem: Card(
+        margin: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(
+              images.isNotEmpty ? images[0].url : '',
+              width: double.infinity,
+              height: 200,
+              fit: BoxFit.contain,
+              cacheHeight: images.isNotEmpty ? images[0].height ~/ 5 : null,
+              cacheWidth: images.isNotEmpty ? images[0].width ~/ 5 : null,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
