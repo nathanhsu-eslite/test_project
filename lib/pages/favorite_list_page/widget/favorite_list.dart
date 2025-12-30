@@ -34,11 +34,9 @@ class FavoriteList extends StatelessWidget {
                 width: favorite.urlWidth,
               ),
             ).push<bool>(context);
-            if (result == true) {
-              if (context.mounted) {
-                context.read<GetAllFavoriteBloc>().add(DoGetAllFavoriteEvent());
-              }
-            }
+            if (result == null || false) return;
+            if (!context.mounted) return;
+            context.read<GetAllFavoriteBloc>().add(DoGetAllFavoriteEvent());
           },
           child: Card(
             margin: const EdgeInsets.all(8.0),

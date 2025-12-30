@@ -47,14 +47,10 @@ class FavoriteView extends StatelessWidget {
                 }
               },
               onSubmitted: (value) {
-                if (value.isNotEmpty) {
-                  onSearchStatusChanged?.call(true);
-                  context.read<FindFavoriteBloc>().add(
-                    FindFavoriteByName(value),
-                  );
-                } else {
-                  onSearchStatusChanged?.call(false);
-                }
+                if (value.isEmpty) return;
+
+                onSearchStatusChanged?.call(true);
+                context.read<FindFavoriteBloc>().add(FindFavoriteByName(value));
               },
             ),
           ),

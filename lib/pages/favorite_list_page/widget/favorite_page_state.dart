@@ -10,39 +10,49 @@ class FavoriteViewState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: isSearchActive
-          ? BlocBuilder<FindFavoriteBloc, FindFavoriteState>(
-              builder: (context, state) {
-                if (state is FindFavoriteDataState) {
-                  if (state.status == FindFavoriteStatus.loading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (state.status == FindFavoriteStatus.success) {
-                    return FavoriteList(favorites: state.favorites);
-                  }
-                  if (state.status == FindFavoriteStatus.failure) {
-                    return Center(
-                      child: Text(state.errorMessage ?? 'Search failed'),
-                    );
-                  }
-                }
-                return Container();
-              },
-            )
-          : BlocBuilder<GetAllFavoriteBloc, GetAllFavoriteState>(
-              builder: (context, state) {
-                if (state.status == GetAllFavoriteStatus.loading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (state.status == GetAllFavoriteStatus.success) {
-                  return FavoriteList(favorites: state.favorites);
-                }
-                return const Center(
-                  child: Text('Press the button to load favorites.'),
-                );
-              },
-            ),
+    return Expanded(child: isSearchActive ? SearchState() : NormalState());
+  }
+}
+
+class SearchState extends StatelessWidget {
+  const SearchState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FindFavoriteBloc, FindFavoriteState>(
+      builder: (context, state) {
+        if (state is FindFavoriteDataState) {
+          if (state.status == FindFavoriteStatus.loading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state.status == FindFavoriteStatus.success) {
+            return FavoriteList(favorites: state.favorites);
+          }
+          if (state.status == FindFavoriteStatus.failure) {
+            return Center(child: Text(state.errorMessage ?? 'Search failed'));
+          }
+        }
+        return Container();
+      },
+    );
+  }
+}
+
+class NormalState extends StatelessWidget {
+  const NormalState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<GetAllFavoriteBloc, GetAllFavoriteState>(
+      builder: (context, state) {
+        if (state.status == GetAllFavoriteStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state.status == GetAllFavoriteStatus.success) {
+          return FavoriteList(favorites: state.favorites);
+        }
+        return const Center(child: Text('Press the button to load favorites.'));
+      },
     );
   }
 }
