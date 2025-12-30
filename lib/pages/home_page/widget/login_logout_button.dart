@@ -21,22 +21,22 @@ class LogInOutButton extends StatelessWidget {
               await GetIt.I.popScopesTill('logged-in').then((_) {
                 dev.log('Logged-in scope popped');
               });
-              if (context.mounted) {
-                context.read<AuthBloc>().add(
-                  const AuthStatusChanged(AuthStatus.unauthenticated),
-                );
-                ImagesRoute().go(context);
-              }
-            },
-          );
-        } else {
-          return IconButton(
-            icon: const Icon(Icons.login),
-            onPressed: () {
-              LoginRoute().push(context);
+
+              if (!context.mounted) return;
+              context.read<AuthBloc>().add(
+                const AuthStatusChanged(AuthStatus.unauthenticated),
+              );
+              ImagesRoute().go(context);
             },
           );
         }
+
+        return IconButton(
+          icon: const Icon(Icons.login),
+          onPressed: () {
+            LoginRoute().push(context);
+          },
+        );
       },
     );
   }
