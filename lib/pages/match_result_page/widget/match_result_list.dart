@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:test_3_35_7/features/get_cat_images/models/my_image.dart';
 import 'package:test_3_35_7/routes/detail_route.dart';
 
-class MatchResultWidget extends StatelessWidget {
-  const MatchResultWidget({super.key, required this.breedMatchResult});
+class MatchResultList extends StatelessWidget {
+  const MatchResultList({super.key, required this.breedMatchResult});
   final BreedMatchResult breedMatchResult;
 
   @override
   Widget build(BuildContext context) {
     final image = breedMatchResult.catModel;
     final breeds = image.breeds;
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         DetailRoute(
           MyImage(
