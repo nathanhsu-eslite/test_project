@@ -1,23 +1,21 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'preference_form_route.dart';
+part of 'images_route.dart';
 
 // **************************************************************************
 // GoRouterGenerator
 // **************************************************************************
 
-List<RouteBase> get $appRoutes => [$preferenceRoute];
+List<RouteBase> get $appRoutes => [$imagesRoute];
 
-RouteBase get $preferenceRoute => GoRouteData.$route(
-  path: '/preference',
-  factory: $PreferenceRoute._fromState,
-);
+RouteBase get $imagesRoute =>
+    GoRouteData.$route(path: '/images', factory: $ImagesRoute._fromState);
 
-mixin $PreferenceRoute on GoRouteData {
-  static PreferenceRoute _fromState(GoRouterState state) => PreferenceRoute();
+mixin $ImagesRoute on GoRouteData {
+  static ImagesRoute _fromState(GoRouterState state) => ImagesRoute();
 
   @override
-  String get location => GoRouteData.$location('/preference');
+  String get location => GoRouteData.$location('/images');
 
   @override
   void go(BuildContext context) => context.go(location);

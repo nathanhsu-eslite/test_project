@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:test_3_35_7/pages/vote_page/vote_page.dart';
 import 'package:test_3_35_7/pages/voted_cats_page/voted_cats_page.dart';
+import 'package:test_3_35_7/routes/home_route.dart';
 
 part 'vote_route.g.dart';
 
@@ -19,9 +20,8 @@ class VoteRoute extends GoRouteData with $VoteRoute {
   }
 }
 
-const votedCatsPath = '/vote/voted-cats';
+const votedCatsPath = 'voted-cats';
 
-@TypedGoRoute<VotedCatsRoute>(path: votedCatsPath)
 class VotedCatsRoute extends GoRouteData with $VotedCatsRoute {
   const VotedCatsRoute();
 

@@ -2,11 +2,11 @@ import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:get_it/get_it.dart';
 import 'package:test_3_35_7/features/get_cat_images/bloc/get_cat_images_bloc.dart';
 import 'package:test_3_35_7/features/get_cat_images/models/my_image.dart';
 import 'package:test_3_35_7/features/votes/blocs/vote_cat/vote_cat_bloc.dart';
 import 'package:test_3_35_7/routes/vote_route.dart';
-import 'package:test_3_35_7/service/service_locator.dart';
 
 class VotePage extends StatelessWidget {
   final UserEntity? user; // Accept UserEntity
@@ -17,9 +17,10 @@ class VotePage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => getIt<GetCatImagesBloc>()..add(GetCatImages()),
+          create: (context) =>
+              GetIt.I.get<GetCatImagesBloc>()..add(GetCatImages()),
         ),
-        BlocProvider(create: (context) => getIt<VoteCatBloc>()),
+        BlocProvider(create: (context) => GetIt.I.get<VoteCatBloc>()),
       ],
       child: VoteView(user: user),
     );

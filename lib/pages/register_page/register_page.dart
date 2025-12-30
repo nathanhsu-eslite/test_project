@@ -1,11 +1,11 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:test_3_35_7/features/auth/blocs/auth/auth_bloc.dart';
 import 'package:test_3_35_7/features/auth/blocs/register_bloc/register_bloc.dart';
 import 'package:test_3_35_7/pages/register_page/widget/register_form.dart';
-import 'package:test_3_35_7/routes/app_routes.dart';
-import 'package:test_3_35_7/routes/home_route.dart';
-import 'package:test_3_35_7/service/service_locator.dart';
+import 'package:test_3_35_7/routes/images_route.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -16,7 +16,7 @@ class RegisterPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Register')),
       body: BlocProvider(
         create: (context) =>
-            RegisterBloc(registerUseCase: getIt<RegisterUseCase>()),
+            RegisterBloc(registerUseCase: GetIt.I.get<RegisterUseCase>()),
         child: BlocListener<RegisterBloc, RegisterState>(
           listener: (context, state) {
             if (state is RegisterFailure) {
@@ -27,8 +27,12 @@ class RegisterPage extends StatelessWidget {
                 ),
               );
             } else if (state is RegisterSuccess) {
-              authNotifier.value = true;
-              HomeRoute(state.user).go(context);
+              context.read<AuthBloc>().add(
+                const AuthStatusChanged(AuthStatus.authenticated),
+              );
+              ImagesRoute().go(
+                context,
+              ); // Navigate to ImagesRoute without extra
             }
           },
           child: const RegisterForm(),

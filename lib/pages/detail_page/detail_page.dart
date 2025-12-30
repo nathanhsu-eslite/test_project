@@ -1,6 +1,8 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:test_3_35_7/features/favorite/blocs/add_favorite/add_favorite_bloc.dart';
 import 'package:test_3_35_7/features/favorite/blocs/delete_favorite/delete_favorite_bloc.dart';
 import 'package:test_3_35_7/features/favorite/blocs/find_favorite/find_favorite_bloc.dart';
@@ -9,7 +11,6 @@ import 'package:test_3_35_7/features/get_cat_images/models/my_image.dart';
 
 import 'package:test_3_35_7/pages/detail_page/widget/detail_widget.dart';
 import 'package:test_3_35_7/pages/error_page/error_page.dart';
-import 'package:test_3_35_7/service/service_locator.dart';
 
 class CatDetailPage extends StatelessWidget {
   const CatDetailPage({super.key, required this.image});
@@ -20,21 +21,23 @@ class CatDetailPage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) =>
-              GetCatBloc(getCatsDetailUseCase: getIt<GetCatDetailUC>())
+              GetCatBloc(getCatsDetailUseCase: GetIt.I.get<GetCatDetailUC>())
                 ..add(GetCatQueried(image.id)),
         ),
         BlocProvider<AddFavoriteBloc>(
-          create: (context) =>
-              AddFavoriteBloc(addFavoriteUseCase: getIt<AddFavoriteUseCase>()),
+          create: (context) => AddFavoriteBloc(
+            addFavoriteUseCase: GetIt.I.get<AddFavoriteUseCase>(),
+          ),
         ),
         BlocProvider<DeleteFavoriteBloc>(
           create: (context) => DeleteFavoriteBloc(
-            deleteFavoriteUC: getIt<DeleteFavoriteUseCase>(),
+            deleteFavoriteUC: GetIt.I.get<DeleteFavoriteUseCase>(),
           ),
         ),
         BlocProvider<FindFavoriteBloc>(
-          create: (context) =>
-              FindFavoriteBloc(findFavoriteUC: getIt<FindFavoriteUseCase>()),
+          create: (context) => FindFavoriteBloc(
+            findFavoriteUC: GetIt.I.get<FindFavoriteUseCase>(),
+          ),
         ),
       ],
       child: CatDetailView(image: image),
@@ -82,6 +85,7 @@ class CatDetailView extends StatelessWidget {
                   FindFavoriteByName(catState.detail.breedName),
                 );
               }
+              context.pop(true);
             } else if (state is DeleteFavoriteFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

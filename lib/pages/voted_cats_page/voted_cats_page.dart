@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:test_3_35_7/features/votes/blocs/delete_vote/delete_votes_bloc.dart';
 import 'package:test_3_35_7/features/votes/blocs/get_votes/get_votes_bloc.dart';
 import 'package:test_3_35_7/pages/voted_cats_page/widget/voted_cat_card.dart';
-import 'package:test_3_35_7/service/service_locator.dart';
 
 class VotedCatsPage extends StatelessWidget {
   const VotedCatsPage({super.key});
@@ -13,9 +13,9 @@ class VotedCatsPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => getIt<GetVotesBloc>()..add(GetVotes()),
+          create: (context) => GetIt.I.get<GetVotesBloc>()..add(GetVotes()),
         ),
-        BlocProvider(create: (context) => getIt<DeleteVotesBloc>()),
+        BlocProvider(create: (context) => GetIt.I.get<DeleteVotesBloc>()),
       ],
       child: const VotedCatsView(),
     );
